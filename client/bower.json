@@ -1,0 +1,25 @@
+{
+  "name": "uiclient",
+  "authors": [
+    "Aditya K <adityak368@gmail.com>"
+  ],
+  "description": "ui components for executemyjobs",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bulma": "^0.4.1",
+    "jquery": "^3.2.1",
+    "toastr": "^2.1.3",
+    "jquery-treegrid": "^0.3.0",
+    "font-awesome": "^4.7.0",
+    "query-string": "^4.3.4"
+  }
+}
