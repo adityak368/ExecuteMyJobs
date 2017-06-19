@@ -3,12 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{{title}}</title>
+    <title>Execute My Jobs</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/toastr/toastr.min.js"></script>
+    <link href="/bower_components/toastr/toastr.min.css" rel="stylesheet">
 </head>
 <body>
-<div id="root">{{{ body }}}</div>
-<script src="js/main.bundle.js"></script>
+<div id="root" style="height: inherit; width: inherit;">
+    {{{ body }}}
+</div>
 </body>
 </html>

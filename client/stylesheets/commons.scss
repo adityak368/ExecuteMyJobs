@@ -1,0 +1,20 @@
+.container-table {
+    margin : 0 2em;
+    display: flex;
+}
+
+.margin-1rem {
+    margin: 1rem;
+}
+
+.page {
+    height: inherit;
+    width: inherit;
+}
+
+.centerChildren{
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

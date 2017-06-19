@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node ./server/bin/www",
-	"startDB" : "mongod --dbpath C:/data/db",
-	"startWebpack" : "webpack -w",
-	"startDev" : "start npm run startDB && start nodemon start && start npm run startWebpack" 
+    "startDB": "mongod --dbpath C:/data/db",
+    "startWebpack": "webpack -w",
+    "startDev": "start npm run startDB && start nodemon start && start npm run startWebpack"
   },
   "dependencies": {
     "axios": "^0.16.1",
+    "babel-polyfill": "^6.23.0",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "^2.6.8",
@@ -18,10 +19,12 @@
     "kue": "^0.11.5",
     "mongoose": "^4.9.7",
     "morgan": "~1.8.1",
-    "prop-types": "^15.5.8",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-router-dom": "^4.1.1",
+    "semantic-ui-css": "^2.2.10",
+    "semantic-ui-react": "^0.68.5",
     "serve-favicon": "~2.4.2",
     "socket.io": "^2.0.1"
   },
@@ -30,10 +33,15 @@
     "babel-loader": "^7.0.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.1",
+    "file-loader": "^0.11.2",
     "jshint": "^2.9.4",
     "jshint-loader": "^0.8.4",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
     "style-loader": "^0.17.0",
+    "url-loader": "^0.5.9",
     "webpack": "^2.5.0"
   }
 }
