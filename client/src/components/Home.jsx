@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import TreeView from 'components/TreeView/TreeView';
+import TreeView from 'components/TreeView';
 import { handleError } from 'commons/errorhandler';
 import { fetchNumberOfAgents, fetchProjects} from 'api/api';
 import { Container, Grid, Header, Icon, Button } from 'semantic-ui-react';
@@ -39,7 +39,7 @@ export default class Home extends Component {
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                    {this.state.projects.length? (<TreeView data={this.state.projects}/>) : null}
+                    {this.state.projects.length? (<TreeView projects={this.state.projects}/>) : null}
                 </Container>
         );
     }

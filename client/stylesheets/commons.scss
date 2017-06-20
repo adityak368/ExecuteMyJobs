@@ -18,3 +18,16 @@
     align-items: center;
     justify-content: center;
 }
+
+.wrapText {
+    word-wrap: break-word;
+}
+
+.treeview {
+    color: #777;
+    font-weight: 300;
+}
+
+.is-clearfix {
+    clear: both;
+}

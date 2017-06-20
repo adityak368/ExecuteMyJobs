@@ -6,34 +6,13 @@ export const fetchNumberOfAgents = () => axios.get(clientConfig.apiUrl + '/api/a
 
 export const fetchProjects = () => axios.get(clientConfig.apiUrl + '/api/projects').then((success) =>  success.data);
 
-export const fetchAgents = () => axios.get(clientConfig.apiUrl + '/api/projects').then((success) =>  success.data );
+export const fetchAgents = () => axios.get(clientConfig.apiUrl + '/api/agents').then((success) =>  success.data );
 
-export const fetchTargetDetails = (benchid,btargetid) => axios.get(clientConfig.apiUrl + '/api/pmbot/targetstatus').then( (success) => {
+export const fetchAgent = (url) => axios.get(clientConfig.apiUrl + url).then((success) =>  success.data);
 
-    let allTargets = success.data;
-    for( var target in allTargets) {
-        if (allTargets[target].BENCH_ID === benchid && allTargets[target].BTARGET_ID === btargetid) {
-            var allTests = allTargets[target].TEST_CASES.TestName;
-            var result = [];
-            for (var i in allTests) {
-                var newTest = {};
-                newTest.TEST_NAME = allTests[i];
-                newTest.TEST_IS_SELECTED = false;
-                newTest.TEST_PROGRESS = 0;
-                newTest.TEST_COMMAND = '';
-                result.push(newTest);
-            }
-            return result;
-        }
-    }
-    return [];
-});
+export const changeAgentAuthorization = (url,data) => axios.put(clientConfig.apiUrl + url,data).then((success) =>  success.data);
 
-export const fetchTargets = () => axios.get(clientConfig.apiUrl + '/api/pmbot/targetstatus').then((success) =>  success.data);
-
-export const fetchBenches = () => axios.get(clientConfig.apiUrl + '/api/pmbot/benchstatus').then((success) =>  success.data);
-
-export const submitFreeHandCommand = (cmd) => axios.post(clientConfig.apiUrl + '/api/pmbot/freehand',{ cmd }).then((success) =>  success.data.message );
+export const changeAgentEnabled = (url,data) => axios.put(clientConfig.apiUrl + url,data).then((success) =>  success.data.message );
 
 export const publishReport = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
 

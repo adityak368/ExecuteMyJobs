@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {Menu, Segment, Container, Icon, Button, Header, Input, Message, Form} from 'semantic-ui-react';
 
 export default class Configuration extends Component {
 
@@ -14,7 +15,17 @@ export default class Configuration extends Component {
         this.onSubmitDeleteBuildStep = this.onSubmitDeleteBuildStep.bind(this);
         this.onChangeWorkingDir = this.onChangeWorkingDir.bind(this);
         this.onChangeBuildStep = this.onChangeBuildStep.bind(this);
-        this.state = {config: {}, workingDir: '', buildStep: {command: '', arguments: '', commandDir: ''}};
+        this.handleItemClick = this.handleItemClick.bind(this);
+        this.state = {
+            config: {},
+            workingDir: '',
+            buildStep: {command: '', arguments: '', commandDir: ''},
+            activeItem: 'config_details'
+        };
+    }
+
+    handleItemClick(e, {name}) {
+        this.setState({activeItem: name});
     }
 
     fetchConfigurationDetails() {
@@ -128,157 +139,85 @@ export default class Configuration extends Component {
 
     }
 
-    onChangeWorkingDir(e) {
-        this.setState({workingDir: e.target.value});
+    onChangeWorkingDir(e, data) {
+        this.setState({workingDir: data.value});
     }
 
-    onChangeBuildStep(e) {
-        if (e.target.name === 'command') {
+    onChangeBuildStep(data,id) {
+        if (id === 'command') {
             let buildStep = this.state.buildStep;
-            buildStep.command = e.target.value;
+            buildStep.command = data.value;
             this.setState({buildStep: buildStep});
         }
-        if (e.target.name === 'args') {
+        if (id === 'args') {
             let buildStep = this.state.buildStep;
-            buildStep.arguments = e.target.value;
+            buildStep.arguments = data.value;
             this.setState({buildStep: buildStep});
         }
-        if (e.target.name === 'commandDir') {
+        if (id === 'commandDir') {
             let buildStep = this.state.buildStep;
-            buildStep.commandDir = e.target.value;
+            buildStep.commandDir = data.value;
             this.setState({buildStep: buildStep});
         }
     }
 
     render() {
+        const {activeItem} = this.state;
         return (
-                <div className="container" style={{marginTop: "3rem"}}>
-                    <div className="columns">
-                        <div className="column">
-                            <div id="tabs" className="tabs is-toggle is-fullwidth">
-                                <ul>
-                                    <li className="is-active" data-tab="config_details"><a >Configuration Details</a>
-                                    </li>
-                                    <li data-tab="edit_buildsteps"><a >Build Steps</a></li>
-                                </ul>
-                            </div>
-                            <div id="config_details" className="tab-content is-active">
-                                <section className="hero">
-                                    <div className="hero-body">
-                                        <div className="container">
-                                            <h1 className="title">
-                                                Configuration Name
-                                            </h1>
-                                            <h2 className="subtitle">
-                                                {this.state.config.name}
-                                            </h2>
-                                        </div>
-                                    </div>
-                                </section>
-                                <section className="hero">
-                                    <div className="hero-body">
-                                        <div className="container">
-                                            <h1 className="title">
-                                                Configuration Description
-                                            </h1>
-                                            <h2 className="subtitle">
-                                                {this.state.config.description}
-                                            </h2>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
-                            <div id="edit_buildsteps" className="tab-content">
-                                <form id="editWorkingDirectory"
-                                      onSubmit={this.onSubmitWorkingDirChange}>
-                                    <div className="field is-horizontal">
-                                        <div className="field-label is-normal">
-                                            <label className="label">Set Working Directory</label>
-                                        </div>
-                                        <div className="field has-addons field-body">
-                                            <p className="control has-icons-left is-expanded">
-                                                <input className="input" type="text" name="workingDir"
-                                                       value={this.state.workingDir}
-                                                       required="true" onChange={this.onChangeWorkingDir}
-                                                       placeholder="Working Directory Path"/>
-                                                <span className="icon is-small is-left">
-                                                <i className="fa fa-user"></i>
-                                            </span>
-                                            </p>
-                                            <p className="control">
-                                                <button type="submit" className="button is-info">
-                                                    Set
-                                                </button>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </form>
+            <Container>
+                <Menu attached='top' tabular>
+                    <Menu.Item name='config_details' active={activeItem === 'config_details'}
+                               onClick={this.handleItemClick}><Icon name="book"/>Configuration Details</Menu.Item>
+                    <Menu.Item name='edit_buildsteps' active={activeItem === 'edit_buildsteps'}
+                               onClick={this.handleItemClick}><Icon name="puzzle"/> Build Steps</Menu.Item>
+                </Menu>
 
-                                <form id="addStepForm" onSubmit={this.onSubmitAddBuildStep}>
-                                    <div className="box is-clearfix" style={{margin: "1rem"}}>
-                                        <article className="media">
-                                            <div className="media-content">
-                                                <div className="content">
-                                                    <div className="field is-horizontal">
-                                                        <div className="field-label is-small">
-                                                            <label className="label">Command</label>
-                                                        </div>
-                                                        <div className="field-body">
-                                                            <div className="field">
-                                                                <div className="control">
-                                                                    <input className="input is-small" type="text"
-                                                                           name="command"
-                                                                           value={this.state.buildStep.command}
-                                                                           required="true"
-                                                                           onChange={this.onChangeBuildStep}/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="field is-horizontal">
-                                                        <div className="field-label is-small">
-                                                            <label className="label">Arguments</label>
-                                                        </div>
-                                                        <div className="field-body">
-                                                            <div className="field">
-                                                                <div className="control">
-                                                                    <input className="input is-small" type="text"
-                                                                           name="args"
-                                                                           value={this.state.buildStep.arguments}
-                                                                           onChange={this.onChangeBuildStep}/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="field is-horizontal">
-                                                        <div className="field-label is-small">
-                                                            <label className="label">Directory for the command
-                                                                execution</label>
-                                                        </div>
-                                                        <div className="field-body">
-                                                            <div className="field">
-                                                                <div className="control">
-                                                                    <input className="input is-small" type="text"
-                                                                           name="commandDir"
-                                                                           value={this.state.buildStep.commandDir}
-                                                                           onChange={this.onChangeBuildStep}/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </article>
-                                        <button className="button is-success is-outlined is-pulled-right" type="submit">
-                                            Add Step
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                <Segment attached='bottom'>
+                    { activeItem === 'config_details' ? (
+                        <Header as='h2'>
+                            <Icon name='settings'/>
+                            <Header.Content>
+                                {this.state.config.name}
+                                <Header.Subheader>
+                                    {this.state.config.description}
+                                </Header.Subheader>
+                            </Header.Content>
+                        </Header>
+                    ) : (
+                        <div>
+                            <Input fluid
+                                   label='Set Working Directory' placeholder='Path to working directory in Agent'
+                                   action={<Button onClick={this.onSubmitWorkingDirChange}><Icon
+                                       name='folder'/></Button>}
+                                   onChange={(e, data) => this.onChangeWorkingDir(e, data)}
+                                   onKeyPress={this.onSubmitWorkingDirChange}/>
+                            <Message>
+                                <Form>
+                                    <Form.Group widths='equal'>
+                                        <Form.Field>
+                                            <Input name="command"
+                                                   value={this.state.buildStep.command}
+                                                   required="true"
+                                                   onChange={(e,data) => this.onChangeBuildStep(data,'command')} placeholder='Command'/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <Input name="args"
+                                                   value={this.state.buildStep.arguments}
+                                                   onChange={(e,data) =>this.onChangeBuildStep(data,'args')} placeholder='Arguments'/>
+                                        </Form.Field>
+                                        <Form.Field>
+                                            <Input name="commandDir"
+                                                   value={this.state.buildStep.commandDir}
+                                                   onChange={(e,data) => this.onChangeBuildStep(data,'commandDir)')} placeholder='Execution directory of the command'/>
+                                        </Form.Field>
+                                    </Form.Group>
+                                </Form>
+                                <Button onClick={this.onSubmitAddBuildStep} inverted color='green' size="small">Add Build Step</Button>
+                            </Message>
                         </div>
-                    </div>
-                </div>
-        );
+                    )}
+                </Segment>
+            </Container> );
     }
 
 }

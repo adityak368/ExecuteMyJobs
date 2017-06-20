@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
+import { Button, Form, Header, Icon, Container, Input } from 'semantic-ui-react';
 
 export default class CreateConfiguration extends Component {
 
@@ -44,32 +45,27 @@ export default class CreateConfiguration extends Component {
 
     render() {
         return (
-                <div className="container" style={{padding: "2rem"}}>
-                    <h3 className="title is-1"> Create a new configuration </h3>
-                    <form id="project_form" onSubmit={this.createNewConfiguration}>
-                        <div className="field">
-                            <label className="label">Configuration Name</label>
-                            <p className="control has-icons-left">
-                                <input id="project_name" className="input" type="text" placeholder="Configuration Name"
-                                       value={this.state.name} onChange={this.handleChangeName}/>
-                                <span className="icon is-small is-left">
-                                  <i className="fa fa-id-card"></i>
-                                </span>
-                            </p>
-                        </div>
-                        <div className="field">
-                            <label className="label">Description</label>
-                            <p className="control has-icons-left">
-                                <input id="project_name" className="input" type="text" placeholder="Description"
-                                       value={this.state.description} onChange={this.handleChangeDescription}/>
-                                <span className="icon is-small is-left">
-                                      <i className="fa fa-book"></i>
-                                    </span>
-                            </p>
-                        </div>
-                        <button type="submit" className="button is-success is-outlined">Create</button>
-                    </form>
-                </div>
+            <Container>
+                <Header as='h2' icon textAlign='center'>
+                    <Icon name='newspaper' circular/>
+                    <Header.Content>
+                        Create New Configuration
+                    </Header.Content>
+                </Header>
+                <Form>
+                    <Form.Field>
+                        <label>Configuration Name</label>
+                        <Input icon='signup' iconPosition='left' id="project_name" className="input" type="text" placeholder="Project Name"
+                               value={this.state.name} onChange={this.handleChangeName}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Configuration Description</label>
+                        <Input icon='book' iconPosition='left' id="project_name" className="input" type="text" placeholder="Description"
+                               value={this.state.description} onChange={this.handleChangeDescription}/>
+                    </Form.Field>
+                    <Button onClick={this.createNewConfiguration} inverted color='green' floated="right">Create</Button>
+                </Form>
+            </Container>
         );
     }
 
