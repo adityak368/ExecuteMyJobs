@@ -1,33 +1,39 @@
-"use strict";
-import clientConfig from 'commons/config';
-import axios from 'axios';
+'use strict'
+import clientConfig from 'commons/config'
+import axios from 'axios'
 
-export const fetchNumberOfAgents = () => axios.get(clientConfig.apiUrl + '/api/agents/count').then((success) =>  success.data);
+export const fetchNumberOfAgents = () => axios.get(clientConfig.apiUrl + '/agents/count').then((success) =>  success.data.connectedAgents)
 
-export const fetchProjects = () => axios.get(clientConfig.apiUrl + '/api/projects').then((success) =>  success.data);
+export const fetchProjects = () => axios.get(clientConfig.apiUrl + '/projects').then((success) =>  success.data)
 
-export const fetchAgents = () => axios.get(clientConfig.apiUrl + '/api/agents').then((success) =>  success.data );
+export const fetchAgents = () => axios.get(clientConfig.apiUrl + '/agents').then((success) =>  success.data )
 
-export const fetchAgent = (url) => axios.get(clientConfig.apiUrl + url).then((success) =>  success.data);
+export const fetchAgent = (agentName) => axios.get(clientConfig.apiUrl + `/agents/${agentName}`).then((success) =>  success.data)
 
-export const changeAgentAuthorization = (url,data) => axios.put(clientConfig.apiUrl + url,data).then((success) =>  success.data);
+export const changeAgentAuthorization = (agentName,data) => axios.put(clientConfig.apiUrl + `/agents/${agentName}`,data).then((success) =>  success.data)
 
-export const changeAgentEnabled = (url,data) => axios.put(clientConfig.apiUrl + url,data).then((success) =>  success.data.message );
+export const changeAgentEnabled = (agentName,data) => axios.put(clientConfig.apiUrl + `/agents/${agentName}`,data).then((success) =>  success.data.message )
 
-export const publishReport = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
+export const createNewConfiguration = (data) => axios.post(clientConfig.apiUrl + '/configurations',data)
 
-export const clearReport = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
+export const createNewProject = (data) => axios.post(clientConfig.apiUrl + '/projects',data)
 
-export const refreshJobLog = (jobid,benchid,btargetid) => axios.get(clientConfig.apiUrl + `/api/pmbot/joblogdetails?job_id=${jobid}&bench_id=${benchid}&btarget_id=${btargetid}`).then((success) =>  success.data[0].LOG_STREAM );
+export const deleteProject = (projectName) => axios.delete(clientConfig.apiUrl + `/projects/${projectName}`).then((success) =>  success.data.message  )
 
-export const submitJob = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
+export const deleteConfiguration = (configName) => axios.delete(clientConfig.apiUrl + `/configurations/${configName}`).then((success) =>  success.data.message  )
 
-export const flashTarget = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
+export const fetchConfiguration = (configName) => axios.get(clientConfig.apiUrl + `/configurations/${configName}`).then((success) =>  success.data  )
 
-export const rebootTarget = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
+export const updateConfiguration = (configName, data) => axios.put(clientConfig.apiUrl + `/configurations/${configName}`,data).then((success) =>  success.data.message  )
 
-export const disconnectUsbFromTarget = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
+export const addBuildStep = (configName,data) => axios.post(clientConfig.apiUrl + `/configurations/${configName}/buildsteps`,data).then((success) =>  success.data.message  )
 
-export const connectUsbToTarget = (data) => axios.post(clientConfig.apiUrl + '/api/pmbot/jobsubmit',data);
+export const removeBuildStep = (configName,stepid) => axios.delete(clientConfig.apiUrl + `/configurations/${configName}/buildsteps/${stepid}`).then((success) =>  success.data.message  )
 
-export const login = (config) => axios.get(clientConfig.apiUrl + '/login',config);
+export const submitJob = (data) => axios.post(clientConfig.apiUrl + '/jobs', data).then((success) =>  success.data.message  )
+
+export const addAgentFilter = (configName,data) => axios.post(clientConfig.apiUrl + `/configurations/${configName}/agentfilter`,data).then((success) =>  success.data.message  )
+
+export const removeAgentFilter  = (configName,data) => axios.delete(clientConfig.apiUrl + `/configurations/${configName}/agentfilter`, data).then((success) =>  success.data.message  )
+
+export const fetchCompatibleAgents = (configName) => axios.get(clientConfig.apiUrl + `/configurations/${configName}/agents`).then((success) =>  success.data)

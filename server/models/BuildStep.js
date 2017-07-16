@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
 
 // create a schema
 var buildStepSchema = new Schema({
@@ -17,18 +17,18 @@ var buildStepSchema = new Schema({
     arguments : {  type: String,
         trim: true},
 
-},{ timestamps: true });
+},{ timestamps: true })
 
-
-var BuildStep = mongoose.model('BuildStep', buildStepSchema);
-
-buildStepSchema.pre('remove', function(callback) {
-    // Remove all the docs that refers
-    var buildStep = this;
+buildStepSchema.pre('remove', function(next) {
     this.model('Configuration').update(
-        { $pull: { buildSteps : buildStep } },
-        { multi: true }, callback);
-});
+        { },
+        { '$pull': { 'buildSteps': this._id } },
+        { 'multi': true },
+        next
+    )
+})
+
+var BuildStep = mongoose.model('BuildStep', buildStepSchema)
 
 // make this available to our users in our Node applications
-module.exports = BuildStep;
+module.exports = BuildStep

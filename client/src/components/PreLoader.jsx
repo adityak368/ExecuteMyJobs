@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Dimmer, Loader,Segment,Image} from 'semantic-ui-react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react'
+import {Dimmer, Loader,Segment,Image} from 'semantic-ui-react'
+import PropTypes from 'prop-types'
 
 export default class PreLoader extends Component {
 
@@ -14,7 +14,7 @@ export default class PreLoader extends Component {
                 <Image src='img/short-paragraph.png'/>
                 <Image src='img/short-paragraph.png'/>
             </Segment>
-        );
+        )
     }
 
 }
@@ -25,6 +25,6 @@ PreLoader.propTypes = {
 }
 
 PreLoader.defaultProps = {
-    message: "Fetching Data!. Please Wait!",
+    message: 'Fetching Data!. Please Wait!',
     inverted: true
 }

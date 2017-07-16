@@ -1,8 +1,7 @@
-"use strict";
+'use strict'
 
 const clientConfig = {
-    apiUrl : ""
-};
+    apiUrl: '/api'
+}
 
-
-export default clientConfig;
+export default clientConfig

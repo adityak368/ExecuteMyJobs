@@ -1,38 +1,36 @@
-import React, {Component} from 'react';
-import axios from 'axios';
-import { Button, Form, Header, Icon, Container, Input } from 'semantic-ui-react';
+import React, {Component} from 'react'
+import axios from 'axios'
+import { Button, Form, Header, Icon, Container, Input } from 'semantic-ui-react'
+import { handleError } from 'commons/errorhandler'
+import { createNewProject } from 'api/api'
+
+import autobind from 'autobind-decorator'
 
 export default class CreateProject extends Component {
 
-    constructor(props) {
-        super(props);
-        this.createNewProject = this.createNewProject.bind(this);
-        this.handleChangeName = this.handleChangeName.bind(this);
-        this.handleChangeDescription = this.handleChangeDescription.bind(this);
-        this.state = {name: '', description: ''};
-    }
-
+    state = {name: '', description: ''}
+    
+    @autobind
     createNewProject(e) {
-        e.preventDefault();
-        axios.post('/api/projects', {
+        e.preventDefault()
+        createNewProject({
             name: this.state.name,
             description: this.state.description
-        })
-            .then((response) => {
-                this.setState({name: '', description: ''});
-                this.props.history.push('/');
-            })
-            .catch((error) => {
-                toastr.error(error.response.data.message, 'Error');
-            });
+        }).then((response) => {
+            toastr.success(`Created New Project ${this.state.name}!`, 'Success')
+            this.setState({name: '', description: ''})
+            this.props.history.push('/')
+        }).catch((error) => handleError(error))
     }
 
+    @autobind
     handleChangeName(e) {
-        this.setState({name: e.target.value});
+        this.setState({name: e.target.value})
     }
 
+    @autobind
     handleChangeDescription(e) {
-        this.setState({description: e.target.value});
+        this.setState({description: e.target.value})
     }
 
     render() {
@@ -48,17 +46,17 @@ export default class CreateProject extends Component {
                     <Form.Field>
                         <label>Project Name</label>
                         <Input icon='signup' iconPosition='left' id="project_name" className="input" type="text" placeholder="Project Name"
-                               value={this.state.name} onChange={this.handleChangeName}/>
+                            value={this.state.name} onChange={this.handleChangeName}/>
                     </Form.Field>
                     <Form.Field>
                         <label>Project Description</label>
                         <Input icon='book' iconPosition='left' id="project_name" className="input" type="text" placeholder="Description"
-                               value={this.state.description} onChange={this.handleChangeDescription} />
+                            value={this.state.description} onChange={this.handleChangeDescription} />
                     </Form.Field>
                     <Button onClick={this.createNewProject} inverted color='green' floated="right">Create</Button>
                 </Form>
             </Container>
-        );
+        )
     }
 
 }

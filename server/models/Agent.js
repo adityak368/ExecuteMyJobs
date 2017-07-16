@@ -26,8 +26,8 @@
 //
 // module.exports  = Agent;
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose')
+var Schema = mongoose.Schema
 
 // create a schema
 var agentSchema = new Schema({
@@ -61,13 +61,15 @@ var agentSchema = new Schema({
     version : {  type: String,
         trim: true,
         required: 'Please Enter a Valid Agent Version!'},
-    env : Object,
-    attributes : Object
+    env : {  type: Object,
+        default: {} },
+    attributes : {  type: Object,
+        default: {} },
 
-},{ timestamps: true });
+},{ timestamps: true , minimize : false})
 
 
-var Agent = mongoose.model('Agent', agentSchema);
+var Agent = mongoose.model('Agent', agentSchema)
 
 // make this available to our users in our Node applications
-module.exports = Agent;
+module.exports = Agent

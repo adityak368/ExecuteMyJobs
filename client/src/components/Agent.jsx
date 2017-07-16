@@ -1,82 +1,82 @@
-import React, {Component} from 'react';
-import {Header, Segment, Icon, List, Label, Checkbox, Container, Menu, Popup, Table} from 'semantic-ui-react';
-import {fetchAgent, changeAgentAuthorization, changeAgentEnabled} from 'api/api';
-import {handleError} from 'commons/errorhandler';
+import React, {Component} from 'react'
+import {Header, Segment, Icon, List, Label, Checkbox, Container, Menu, Popup, Table} from 'semantic-ui-react'
+import {fetchAgent, changeAgentAuthorization, changeAgentEnabled} from 'api/api'
+import {handleError} from 'commons/errorhandler'
 
 export default class Agent extends Component {
 
     constructor(props) {
-        super(props);
-        this.OnAgentAuthorizationChanged = this.OnAgentAuthorizationChanged.bind(this);
-        this.OnAgentStatusChanged = this.OnAgentStatusChanged.bind(this);
-        this.handleItemClick = this.handleItemClick.bind(this);
-        this.state = {agent: {}, activeItem: 'agent_summary'};
+        super(props)
+        this.OnAgentAuthorizationChanged = this.OnAgentAuthorizationChanged.bind(this)
+        this.OnAgentStatusChanged = this.OnAgentStatusChanged.bind(this)
+        this.handleItemClick = this.handleItemClick.bind(this)
+        this.state = {agent: {}, activeItem: 'agent_summary'}
     }
 
     handleItemClick(e, {name}) {
-        this.setState({activeItem: name});
+        this.setState({activeItem: name})
     }
 
     componentDidMount() {
-        fetchAgent('/api/agents/' + this.props.match.params.agentName)
+        fetchAgent(this.props.match.params.agentName)
             .then((agent) => this.setState({agent}))
-            .catch((error) => handleError(error));
+            .catch((error) => handleError(error))
     }
 
     OnAgentAuthorizationChanged(e, data) {
-        let agent = this.state.agent;
-        agent.isAuthorized = data.checked;
-        this.setState({agent});
-        changeAgentAuthorization('/api/agents/' + this.props.match.params.agentName, {
+        let agent = this.state.agent
+        agent.isAuthorized = data.checked
+        this.setState({agent})
+        changeAgentAuthorization(this.props.match.params.agentName, {
             isAuthorized: data.checked
-        }).catch((error) => handleError(error));
+        }).catch((error) => handleError(error))
     }
 
     OnAgentStatusChanged(e, data) {
 
-        let agent = this.state.agent;
-        agent.isEnabled = data.checked;
-        this.setState({agent});
-        changeAgentEnabled('/api/agents/' + this.props.match.params.agentName, {
+        let agent = this.state.agent
+        agent.isEnabled = data.checked
+        this.setState({agent})
+        changeAgentEnabled( this.props.match.params.agentName, {
             isEnabled: data.checked
-        }).catch((error) => handleError(error));
+        }).catch((error) => handleError(error))
     }
 
     render() {
-        const attrs = [];
+        const attrs = []
         for (var attr in this.state.agent.attributes) {
             if (this.state.agent.attributes.hasOwnProperty(attr)) {
                 attrs.push(
                     <Table.Row key={attr + 'prop'}>
                         <Table.Cell> {attr}</Table.Cell>
                         <Table.Cell className="wrapText">{this.state.agent.attributes[attr]}</Table.Cell>
-                    </Table.Row>);
+                    </Table.Row>)
             }
         }
 
-        const env = [];
+        const env = []
         for (var attr in this.state.agent.env) {
             if (this.state.agent.env.hasOwnProperty(attr)) {
                 env.push(
                     <Table.Row key={attr + 'env'}>
                         <Table.Cell>{attr}</Table.Cell>
                         <Table.Cell className="wrapText">{this.state.agent.env[attr]}</Table.Cell>
-                    </Table.Row>);
+                    </Table.Row>)
             }
         }
 
 
-        let lastConnectedTimeStamp = new Date(this.state.agent.updatedAt);
+        let lastConnectedTimeStamp = new Date(this.state.agent.updatedAt)
         return (
             <Container>
                 <Menu attached='top' tabular>
                     <Menu.Item name='agent_summary' active={this.state.activeItem === 'agent_summary'}
-                               onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="signal"/> Agent Summary</Menu.Item>
+                        onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="signal"/> Agent Summary</Menu.Item>
                     <Menu.Item name='agent_attributes' active={this.state.activeItem === 'agent_attributes'}
-                               onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="shutdown"/> Agent
+                        onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="shutdown"/> Agent
                         Attributes</Menu.Item>
                     <Menu.Item name='agent_environment' active={this.state.activeItem === 'agent_environment'}
-                               onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="shield"/> Agent
+                        onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="shield"/> Agent
                         Environment</Menu.Item>
                 </Menu>
 
@@ -118,7 +118,7 @@ export default class Agent extends Component {
                                             </Header>
                                             <Header as='h4' floated='right'>
                                                 <Checkbox toggle checked={this.state.agent.isAuthorized}
-                                                          onChange={this.OnAgentAuthorizationChanged}/>
+                                                    onChange={this.OnAgentAuthorizationChanged}/>
                                             </Header>
                                         </List.Content>
                                     </List.Item>
@@ -132,7 +132,7 @@ export default class Agent extends Component {
                                             </Header>
                                             <Header as='h4' floated='right'>
                                                 <Checkbox toggle checked={this.state.agent.isEnabled}
-                                                          onChange={this.OnAgentStatusChanged}/>
+                                                    onChange={this.OnAgentStatusChanged}/>
                                             </Header>
                                         </List.Content>
                                     </List.Item>
@@ -202,7 +202,7 @@ export default class Agent extends Component {
                         </Table>
                     ) }
                 </Segment>
-            </Container>);
+            </Container>)
     }
 
 }

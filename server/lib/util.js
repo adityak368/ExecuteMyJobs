@@ -1,5 +1,5 @@
 function excludeVersion() {
-    return { __v : 0 };
+    return { __v : 0 }
 }
 
 module.exports = {
