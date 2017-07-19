@@ -88,15 +88,6 @@ function onListening() {
     debug('Listening on ' + bind)
 }
 
-var io = require('socket.io')(server)
-var agentTrack = require('../agents/agenttrack')
-io.use(function(socket, next){
-    // return the result of next() to accept the connection.
-    if (socket.handshake.query.password === 'ExecuteMyJobsAgent') {
-        return next()
-    }
-    // call next() with an Error if you need to reject the connection.
-    next(new Error('Authentication error'))
-})
-
-io.on('connection',  agentTrack.handleConnection)
+// init socketio to listen for agents
+var socketManger = require('../agentSocketManager')
+socketManger.initSocketio(server)

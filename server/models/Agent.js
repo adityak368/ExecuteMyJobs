@@ -52,7 +52,6 @@ var agentSchema = new Schema({
         default: false
     },
     ipAddress : {  type: String,
-        unique : true,
         trim: true,
         required: 'Please Enter a Valid Ip!'},
     os : {  type: String,

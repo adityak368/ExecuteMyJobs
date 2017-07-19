@@ -24,8 +24,7 @@ function handleIdentification(socket) {
                     socket.emit('exception', 'Agent by that name already exists!')
                     return
                 } else {
-                    registeredAgent.isConnected = true
-                    registeredAgent.save(function (err) {
+                    Agent.update({name: connectedAgent.name},{isConnected : true}, function (err) {
                         if (err) {
                             socket.emit('exception', err.message)
                             return

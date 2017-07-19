@@ -157,7 +157,7 @@ router.route('/configurations/:configuration/agents').get(function(req, res) {
             return { k:filter.k, v:filter.v}
         })
 
-        Agent.aggregate([ {$match : {isConnected : true}}, 
+        Agent.aggregate([ {$match : {isConnected : true, isAuthorized : true, isEnabled : true}}, 
             { '$project' : {'os' : 1,'name' : 1,'env' : 1,'attributes' : 1, 'version':1, description : 1 }},
             {'$project' : { 'otherAttributes' : { 'os' : '$os','name' : '$name','version': '$version' }, 'env' : 1,  'attributes':1, name: 1, description: 1  } },
             {'$project' : { 'allattributes' : { '$setUnion' : [ {'$objectToArray' :  '$env'}, {'$objectToArray' :  '$attributes'}, {'$objectToArray' :  '$otherAttributes'}]}, name: 1, description: 1 } },
@@ -197,7 +197,7 @@ router.route('/configurations/:configuration/buildsteps').get(function(req, res)
             res.status(500).json({message:err.message})
             return
         }
-        Configuration.findOneAndUpdate({name:req.params.configuration},{ '$push': { buildSteps: newBuildStep } }, {upsert:true},function (err, agent) {
+        Configuration.findOneAndUpdate({name:req.params.configuration},{ '$push': { buildSteps: newBuildStep } }, function (err, agent) {
             if(err) {
                 res.status(500).json({message:err.message})
                 return
@@ -241,7 +241,7 @@ router.route('/configurations/:configuration/agentfilter').get(function(req, res
 
 }).post(function(req,res) {
 
-    Configuration.findOneAndUpdate({name:req.params.configuration},{ '$push': { agentFilter: req.body } }, {upsert:true},function (err, configuration) {
+    Configuration.findOneAndUpdate({name:req.params.configuration},{ '$push': { agentFilter: req.body } }, function (err, configuration) {
         if(err) {
             res.status(500).json({message:err.message})
             return
@@ -312,7 +312,7 @@ router.route('/agents/:agent').get(function(req, res) {
     }).select('-__v')
 
 }).put(function (req,res) {
-    Agent.findOneAndUpdate({name:req.params.agent},req.body, {upsert:true},function (err, agent) {
+    Agent.findOneAndUpdate({name:req.params.agent},req.body, function (err, agent) {
         if(err) {
             res.status(500).json({message:err.message})
             return
