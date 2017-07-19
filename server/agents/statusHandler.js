@@ -1,10 +1,11 @@
-var io = require('../agentSocketManager')
+var queue = require('../jobs/jobQueue').getQueue()
+var JobProcessor = require('../jobs/jobProcessor')
 
-function statusHandler(socket, job, jobOptions) {
-    return function(data) {
-        if(!data.isBusy) {
-            io.getio().sockets.in(jobOptions.agent).emit('startjob', job)
-            job.log('Agent Found. Started Job...')
+function statusHandler(socket) {
+    return function(response) {
+        console.log('Agent Status: '+ response.job.data.agent + ' ' + response.isBusy)
+        if(!response.isBusy) {
+            queue.process(response.job.data.agent, JobProcessor.getJobProcessor())
         }
     }
 

@@ -24,17 +24,14 @@ public class SocketIOClientStatusHandler implements IEventHandler {
 		if(manager!=null) {
 			try {
 				JSONObject status = new JSONObject();
-				if(manager.isBusy()) {
-					status.put("isBusy", true);
-				} else {
-					status.put("isBusy", false);
-				}
+				status.put("isBusy", manager.isBusy());
+				status.put("job",args[0]);
 				emitMsg(status);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-				
+			System.out.println("Status : Busy = " + manager.isBusy() );
 		}
 	}
 

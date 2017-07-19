@@ -10,13 +10,13 @@ public class JobManager {
 		return mJobmanager;
 	}
 	
-	boolean isBusy = false;
+	volatile boolean isBusy = false;
 	
 	private JobManager() {
 		
 	}
 
-	public boolean isBusy() {
+	public synchronized boolean isBusy() {
 		return isBusy;
 	}
 

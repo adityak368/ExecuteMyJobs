@@ -1,9 +1,9 @@
 function jobProgressHandler(socket, job) {
-    return function(data) {
+    return function(response) {
         if(job)
-            job.progress(data.progress,100)
+            job.progress(response.progress,100)
         else
-            console.log('JobProgress Update for '+ data.id + ' failed')
+            console.log('JobProgress Update for '+ job.id + ' failed')
     }
 
 }

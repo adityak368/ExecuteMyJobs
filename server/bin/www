@@ -89,5 +89,5 @@ function onListening() {
 }
 
 // init socketio to listen for agents
-var socketManger = require('../agentSocketManager')
-socketManger.initSocketio(server)
+var socketManager = require('../agentSocketManager')
+socketManager.initSocketio(server)

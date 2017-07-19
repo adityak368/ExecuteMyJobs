@@ -1,9 +1,9 @@
 function jobLogHandler(socket,job) {
-    return function(data) {
+    return function(response) {
         if(job)
-            job.log(data.log)
+            job.log(response.log)
         else
-            console.log('Joblogging for '+ data.id + ' failed')
+            console.log('Joblogging for '+ job.id + ' failed')
     }
 
 }

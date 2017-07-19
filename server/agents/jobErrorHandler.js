@@ -1,10 +1,10 @@
 
 function jobErrorHandler(socket, job, done) {
-    return function(data) {
+    return function(response) {
         if(job)
-            done(new Error(data.error))
+            done(new Error(response.error))
         else
-            console.log('JobErrorHandling for '+data.id+' failed')
+            console.log('JobErrorHandling for '+job.id+' failed')
     }
 
 }
