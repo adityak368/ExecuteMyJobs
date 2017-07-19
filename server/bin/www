@@ -88,6 +88,30 @@ function onListening() {
     debug('Listening on ' + bind)
 }
 
-// init socketio to listen for agents
-var socketManager = require('../agentSocketManager')
-socketManager.initSocketio(server)
+//initialize socketio for agents
+var SocketIO = require('../agentSocketManager')
+SocketIO.initSocketio(server)
+
+
+// var queue = require('../jobs/jobQueue').getQueue()
+// setTimeout(function() {
+//     queue.process('6427ad08-775a-4cb8-a606-45c0ac919d59', function(job,done) {
+//                 var clients = SocketIO.getio().sockets.adapter.rooms[job.data.agent].sockets
+//                 var socket = SocketIO.getio().sockets.sockets[Object.keys(clients)[0]]
+//                 socket.on('joblog', function(response) {
+//                     job.log(response.log)
+//                 })
+//                 socket.on('jobprogress',  function(response) {
+//                     job.progress(response.progress,100)
+//                 })
+//                 socket.on('jobcompleted', function(response) {
+//                     done()
+//                 })
+//                 socket.on('joberror', function(response) {
+//                     done(new Error(response.error))
+//                 })
+        
+//                 socket.emit('startjob', job)
+//                 job.log('Agent Found. Started Job...')
+//             })
+// },30000)

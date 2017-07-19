@@ -1,13 +1,13 @@
 var identificationHandler = require('./identificationHandler')
 var disconnectionHandler = require('./disconnectionHandler')
-var statusHandler = require('./statusHandler')
+//var statusHandler = require('./statusHandler')
 
 function handleConnection(socket) {
     console.log('New Agent Connected ' + socket.conn.remoteAddress.replace(/^.*:/, ''))
 
     socket.on('agentIdentification', identificationHandler(socket))
     socket.on('disconnect', disconnectionHandler(socket))
-    socket.on('status', statusHandler(socket))
+    //socket.on('status', statusHandler(socket))
 
     if(socket.handshake.query.name) {
         socket.join(socket.handshake.query.name)

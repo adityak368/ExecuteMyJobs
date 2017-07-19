@@ -5,5 +5,6 @@ module.exports = {
         host: 'localhost',
         auth: ''
     },
-    socketIoAuthPassword : 'ExecuteMyJobsAgent'
+    socketIoAuthPassword : 'ExecuteMyJobsAgent',
+    mongo : {db: { address: 'mongodb://127.0.0.1:27017/ExecuteMyJobs', collection: 'agendaJobs' }}
 }

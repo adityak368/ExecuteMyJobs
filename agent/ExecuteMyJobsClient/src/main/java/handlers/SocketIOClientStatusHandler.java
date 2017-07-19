@@ -25,7 +25,7 @@ public class SocketIOClientStatusHandler implements IEventHandler {
 			try {
 				JSONObject status = new JSONObject();
 				status.put("isBusy", manager.isBusy());
-				status.put("job",args[0]);
+				status.put("agent", mConfigLoader.getName());
 				emitMsg(status);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

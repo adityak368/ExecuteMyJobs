@@ -40,10 +40,10 @@ public class SocketIOClientStartJobHandler implements IEventHandler {
 							Thread.sleep(1000);
 							JSONObject progress = new JSONObject();
 							progress.put("progress", i*10);
-							progress.put("id", job.get("id"));
+							progress.put("job", args[0]);
 							JSONObject log = new JSONObject();
 							log.put("log", "Progress " + Integer.toString(i));
-							log.put("id", job.get("id"));
+							progress.put("job", args[0]);
 							mSocket.emit(EventDefs.JOB_LOG, log);
 							mSocket.emit(EventDefs.JOB_PROGRESS, progress);
 

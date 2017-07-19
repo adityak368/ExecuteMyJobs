@@ -324,7 +324,6 @@ router.route('/agents/:agent').get(function(req, res) {
 router.route('/jobs').post(function(req, res) {
     JobManager.createJob({
         type : req.body.configuration.name,
-        title : req.body.configuration.name,
         configuration : req.body.configuration,
         agent : req.body.agent
     }, function(err, jobId) {

@@ -36,7 +36,7 @@ export default class Navbar extends Component {
                     <Icon name="desktop" /> Agents <Label color='blue'> {this.state.agentCount} </Label>
                 </Menu.Item>
 
-                <Menu.Item name='jobs' active={this.state.activeItem === 'jobs'}  as='a' href='/kue'>
+                <Menu.Item name='jobs' active={this.state.activeItem === 'jobs'}  as='a' href='/jobs'>
                     <Icon name="announcement" /> Jobs
                 </Menu.Item>
 

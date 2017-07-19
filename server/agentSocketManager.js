@@ -1,4 +1,5 @@
 var config = require('./config')
+var agentTrack = require('./agents/agenttrack')
 var io = null
 
 function initSocketio(server) {
@@ -12,7 +13,6 @@ function initSocketio(server) {
         next(new Error('Authentication error'))
     })
 
-    var agentTrack = require('./agents/agenttrack')
     io.on('connection',  agentTrack.handleConnection)
 }
 

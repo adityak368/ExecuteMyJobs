@@ -29,10 +29,11 @@ export default class AgentSelectionModal extends Component {
 
     @autobind
     onSubmitJob() {
+        this.props.onCloseAgentSelectionModal() 
         if (this.props.configuration.name) {
             if(this.state.selectedAgent.trim()) {
                 submitJob({configuration : this.props.configuration, agent : this.state.selectedAgent})
-                    .then((message) =>{ this.setState({ selectedAgent : ''}); toastr.success(message, 'Success!'); this.props.onCloseAgentSelectionModal() })
+                    .then((message) =>{ this.setState({ selectedAgent : ''}); toastr.success(message, 'Success!')})
                     .catch((error) => handleError(error))
             } else {
                 toastr.error('Please Select an Agent!', 'Error!')

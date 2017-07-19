@@ -10,7 +10,8 @@ var db = require('./db')
 var api = require('./routes/api')
 var routes = require('./routes/index')
 
-var kue = require('kue')
+var agenda = require('./jobs/agenda')
+var Agendash = require('agendash')
 
 var app = express()
 
@@ -28,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/bower_components', express.static(path.join(__dirname, '../client', 'bower_components')))
 
 app.use('/api', api)
-app.use('/kue', kue.app)
+app.use('/jobs', Agendash(agenda))
 app.use('*', routes)
 
 db.connect( config.dbUrl, function(err) {

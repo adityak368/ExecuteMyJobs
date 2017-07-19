@@ -9,6 +9,8 @@
     "startDev": "start npm run startDB && start nodemon start && start npm run startWebpack"
   },
   "dependencies": {
+    "agenda": "^0.9.1",
+    "agendash": "^0.4.0",
     "autobind-decorator": "^2.1.0",
     "axios": "^0.16.1",
     "babel-polyfill": "^6.23.0",
