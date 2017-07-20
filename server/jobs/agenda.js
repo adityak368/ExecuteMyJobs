@@ -9,8 +9,13 @@ agenda.on('ready', function() {
 })
 
 agenda.on('start', function(job) {
-    console.log('Job %s with id %s starting on %s', job.attrs.name, job.attrs._id, job.attrs.data.agent)
+    console.log('Job %s with id %s starting on %s', job.attrs.data.type, job.attrs._id, job.attrs.data.agent)
 })
+
+agenda.undefine = function(name) {
+    if(agenda._definitions.hasOwnProperty(name))
+        delete agenda._definitions[name]
+}
 
 agenda.defaultConcurrency(1)
 

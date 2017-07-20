@@ -24,8 +24,9 @@ public class SocketIOClientStartJobHandler implements IEventHandler {
 		// TODO Auto-generated method stub
 		JSONObject job = ((JSONObject) args[0]);
 		try {
-			System.out.println("Starting Job " + job.get("type"));
-			System.out.println("Job Params:\n" + job.get("data").toString());
+			JSONObject jobData = (JSONObject) job.get("data");
+			System.out.println("Starting Job " + jobData.get("type"));
+			System.out.println("Job Params:\n" + jobData.toString());
 			ExecutorService ser = Executors.newFixedThreadPool(1);
 			ser.execute(new Runnable() {
 

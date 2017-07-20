@@ -13,7 +13,7 @@ function initSocketio(server) {
         next(new Error('Authentication error'))
     })
 
-    io.on('connection',  agentTrack.handleConnection)
+    io.on('connection',  agentTrack.handleConnection(io))
 }
 
 function getio() {
