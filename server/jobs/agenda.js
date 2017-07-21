@@ -19,4 +19,13 @@ agenda.undefine = function(name) {
 
 agenda.defaultConcurrency(1)
 
+function shutDownAgenda() {
+    agenda.stop(function() {
+        process.exit(0)
+    })
+}
+
+process.on('SIGTERM', shutDownAgenda)
+process.on('SIGINT' , shutDownAgenda)
+
 module.exports = agenda

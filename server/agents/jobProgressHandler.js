@@ -1,6 +1,7 @@
 function jobProgressHandler(job,socket) {
     return function(response) {
-        progress(job, response.progress)
+        console.log(response)
+        progress(job, response)
     }
 }
 

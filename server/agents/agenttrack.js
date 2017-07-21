@@ -28,7 +28,9 @@ function handleConnection(SocketIO) {
             if(clients) {
                 var socket = SocketIO.sockets.sockets[Object.keys(clients.sockets)[0]]
                 socket.removeAllListeners()
-
+                job.attrs.data.log = ''
+                job.attrs.data.progress = 0
+                job.save()
                 socket.on('agentIdentification', identificationHandler(socket))
                 socket.on('disconnect', disconnectionHandler.disconnectionHandlerAfterJobStart(job,clientSocket,done))
                 socket.on('joblog', jobLogHandler(job,socket))

@@ -157,7 +157,7 @@ router.route('/configurations/:configuration/agents').get(function(req, res) {
             return { k:filter.k, v:filter.v}
         })
 
-        Agent.aggregate([ {$match : {isConnected : true, isAuthorized : true, isEnabled : true}}, 
+        Agent.aggregate([ {$match : {isAuthorized : true, isEnabled : true}}, 
             { '$project' : {'os' : 1,'name' : 1,'env' : 1,'attributes' : 1, 'version':1, description : 1 }},
             {'$project' : { 'otherAttributes' : { 'os' : '$os','name' : '$name','version': '$version' }, 'env' : 1,  'attributes':1, name: 1, description: 1  } },
             {'$project' : { 'allattributes' : { '$setUnion' : [ {'$objectToArray' :  '$env'}, {'$objectToArray' :  '$attributes'}, {'$objectToArray' :  '$otherAttributes'}]}, name: 1, description: 1 } },

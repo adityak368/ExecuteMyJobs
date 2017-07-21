@@ -1,4 +1,4 @@
-function jobCompletedHandler(job,socke,done) {
+function jobCompletedHandler(job,socket,done) {
     return function(response) {
         progress(job, 100)
         done()

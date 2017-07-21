@@ -1,6 +1,6 @@
 function jobErrorHandler(job,socket) {
     return function(response) {
-        done(new Error(response.error))
+        done(new Error(response))
     }
 }
 
