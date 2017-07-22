@@ -1,6 +1,5 @@
 function jobLogHandler(job,socket) {
     return function(response) {
-        console.log(response)
         log(job,response)
     }
 }

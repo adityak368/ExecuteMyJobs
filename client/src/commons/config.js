@@ -1,7 +1,8 @@
 'use strict'
 
 const clientConfig = {
-    apiUrl: '/api'
+    apiUrl: '/api',
+    agendashUrl: '/agendash/api'
 }
 
 export default clientConfig

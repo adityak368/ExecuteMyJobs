@@ -67,7 +67,7 @@ export default class TreeView extends Component {
                         />
                     </List.Content>
                     <List.Content>
-                        <List.Header><Link to={`configuration/${config.name}`}> {config.name} </Link></List.Header>
+                        <List.Header><Link to={`configurations/${config.name}`}> {config.name} </Link></List.Header>
                         <List.Description>{config.description}</List.Description>
                     </List.Content>
                 </List.Item>

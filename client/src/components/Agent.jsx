@@ -1,72 +1,89 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 import {Header, Segment, Icon, List, Label, Checkbox, Container, Menu, Popup, Table} from 'semantic-ui-react'
-import {fetchAgent, changeAgentAuthorization, changeAgentEnabled} from 'api/api'
+import {fetchAgent, changeAgentAuthorization, changeAgentEnabled, fetchCompatibleConfigurations} from 'api/api'
+import NoAgentsFound from 'components/NotFound'
 import {handleError} from 'commons/errorhandler'
 
+import {observer, PropTypes as MobxPropTypes} from 'mobx-react'
+import PropTypes from 'prop-types'
+import autobind from 'autobind-decorator'
+
+@observer
 export default class Agent extends Component {
 
-    constructor(props) {
-        super(props)
-        this.OnAgentAuthorizationChanged = this.OnAgentAuthorizationChanged.bind(this)
-        this.OnAgentStatusChanged = this.OnAgentStatusChanged.bind(this)
-        this.handleItemClick = this.handleItemClick.bind(this)
-        this.state = {agent: {}, activeItem: 'agent_summary'}
-    }
-
+    state = {activeItem: 'agent_summary'}
+  
+    @autobind
     handleItemClick(e, {name}) {
         this.setState({activeItem: name})
     }
 
+    @autobind
+    handleCompatibleConfigurationsClicked(e) {
+        const { store } = this.props
+
+    }
+
     componentDidMount() {
+        const {store} = this.props
         fetchAgent(this.props.match.params.agentName)
-            .then((agent) => this.setState({agent}))
+            .then((agent) => store.agent = agent)
             .catch((error) => handleError(error))
     }
 
+    @autobind
     OnAgentAuthorizationChanged(e, data) {
-        let agent = this.state.agent
-        agent.isAuthorized = data.checked
-        this.setState({agent})
+        const {store} = this.props
+        store.agent.isAuthorized = data.checked
         changeAgentAuthorization(this.props.match.params.agentName, {
             isAuthorized: data.checked
         }).catch((error) => handleError(error))
     }
 
+    @autobind
     OnAgentStatusChanged(e, data) {
-
-        let agent = this.state.agent
-        agent.isEnabled = data.checked
-        this.setState({agent})
+        const {store} = this.props
+        store.agent.isEnabled = data.checked
         changeAgentEnabled( this.props.match.params.agentName, {
             isEnabled: data.checked
         }).catch((error) => handleError(error))
     }
 
     render() {
+        const {store} = this.props
         const attrs = []
-        for (var attr in this.state.agent.attributes) {
-            if (this.state.agent.attributes.hasOwnProperty(attr)) {
+        for (var attr in store.agent.attributes) {
+            if (store.agent.attributes.hasOwnProperty(attr)) {
                 attrs.push(
                     <Table.Row key={attr + 'prop'}>
                         <Table.Cell> {attr}</Table.Cell>
-                        <Table.Cell className="wrapText">{this.state.agent.attributes[attr]}</Table.Cell>
+                        <Table.Cell className="wrapText">{store.agent.attributes[attr]}</Table.Cell>
                     </Table.Row>)
             }
         }
 
         const env = []
-        for (var attr in this.state.agent.env) {
-            if (this.state.agent.env.hasOwnProperty(attr)) {
+        for (var attr in store.agent.env) {
+            if (store.agent.env.hasOwnProperty(attr)) {
                 env.push(
                     <Table.Row key={attr + 'env'}>
                         <Table.Cell>{attr}</Table.Cell>
-                        <Table.Cell className="wrapText">{this.state.agent.env[attr]}</Table.Cell>
+                        <Table.Cell className="wrapText">{store.agent.env[attr]}</Table.Cell>
                     </Table.Row>)
             }
         }
 
+        const compatibleconfigurations = (!store.agent.compatibleConfigurations || store.agent.compatibleConfigurations.length == 0) ? <NoAgentsFound msg={'No Configurations Found'}/> : store.agent.compatibleConfigurations.map((configuration) =>
+            <List.Item key={configuration.name}>
+                <List.Icon name='github' size='large' verticalAlign='middle' />
+                <List.Content>
+                    <List.Header><Link to={`/configurations/${configuration.name}`}><strong>{configuration.name}</strong></Link></List.Header>
+                    <List.Description>{configuration.description}</List.Description>
+                </List.Content>
+            </List.Item>)
 
-        let lastConnectedTimeStamp = new Date(this.state.agent.updatedAt)
+        let lastConnectedTimeStamp = new Date(store.agent.updatedAt)
         return (
             <Container>
                 <Menu attached='top' tabular>
@@ -78,6 +95,9 @@ export default class Agent extends Component {
                     <Menu.Item name='agent_environment' active={this.state.activeItem === 'agent_environment'}
                         onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="shield"/> Agent
                         Environment</Menu.Item>
+                    <Menu.Item name='compatible_configurations' active={this.state.activeItem === 'compatible_configurations'}
+                        onClick={(e, data) => this.handleItemClick(e, data)}><Icon name="checkmark"/> Compatible 
+                        Configurations</Menu.Item>
                 </Menu>
 
                 <Segment attached='bottom'>
@@ -94,9 +114,9 @@ export default class Agent extends Component {
                                     <List.Item>
                                         <List.Content>
                                             <Header as='h4'>
-                                                <Label color={this.state.agent.isConnected ? 'green' : 'red'}>
+                                                <Label color={store.agent.isConnected ? 'green' : 'red'}>
                                                     <Icon
-                                                        name={this.state.agent.isConnected ? 'signal' : 'lightning'}/> {this.state.agent.isConnected ? 'Connected' : 'Disconnected.'} {this.state.agent.isConnected ? '' : (' Last Connected At ' + lastConnectedTimeStamp.toLocaleString())}
+                                                        name={store.agent.isConnected ? 'signal' : 'lightning'}/> {store.agent.isConnected ? 'Connected' : 'Disconnected.'} {store.agent.isConnected ? '' : (' Last Connected At ' + lastConnectedTimeStamp.toLocaleString())}
                                                 </Label>
                                             </Header>
                                         </List.Content>
@@ -111,13 +131,13 @@ export default class Agent extends Component {
                                     <List.Item>
                                         <List.Content>
                                             <Header as='h4'>
-                                                <Label color={this.state.agent.isAuthorized ? 'green' : 'red'}>
+                                                <Label color={store.agent.isAuthorized ? 'green' : 'red'}>
                                                     <Icon
-                                                        name={this.state.agent.isAuthorized ? 'shield' : 'ban'}/> {this.state.agent.isAuthorized ? 'Authorized' : 'Unauthorized '}
+                                                        name={store.agent.isAuthorized ? 'shield' : 'ban'}/> {store.agent.isAuthorized ? 'Authorized' : 'Unauthorized '}
                                                 </Label>
                                             </Header>
                                             <Header as='h4' floated='right'>
-                                                <Checkbox toggle checked={this.state.agent.isAuthorized}
+                                                <Checkbox toggle checked={store.agent.isAuthorized}
                                                     onChange={this.OnAgentAuthorizationChanged}/>
                                             </Header>
                                         </List.Content>
@@ -125,13 +145,13 @@ export default class Agent extends Component {
                                     <List.Item>
                                         <List.Content>
                                             <Header as='h4'>
-                                                <Label color={this.state.agent.isEnabled ? 'green' : 'red'}>
+                                                <Label color={store.agent.isEnabled ? 'green' : 'red'}>
                                                     <Icon
-                                                        name={this.state.agent.isEnabled ? 'checkmark' : 'remove'}/> {this.state.agent.isEnabled ? 'Enabled' : 'Disabled'}
+                                                        name={store.agent.isEnabled ? 'checkmark' : 'remove'}/> {store.agent.isEnabled ? 'Enabled' : 'Disabled'}
                                                 </Label>
                                             </Header>
                                             <Header as='h4' floated='right'>
-                                                <Checkbox toggle checked={this.state.agent.isEnabled}
+                                                <Checkbox toggle checked={store.agent.isEnabled}
                                                     onChange={this.OnAgentStatusChanged}/>
                                             </Header>
                                         </List.Content>
@@ -154,23 +174,23 @@ export default class Agent extends Component {
                                 <Table.Body>
                                     <Table.Row>
                                         <Table.Cell>Agent Name</Table.Cell>
-                                        <Table.Cell>{this.state.agent.name}</Table.Cell>
+                                        <Table.Cell>{store.agent.name}</Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>Description</Table.Cell>
-                                        <Table.Cell>{this.state.agent.description}</Table.Cell>
+                                        <Table.Cell>{store.agent.description}</Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>IP Address</Table.Cell>
-                                        <Table.Cell>{this.state.agent.ipAddress}</Table.Cell>
+                                        <Table.Cell>{store.agent.ipAddress}</Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>Os</Table.Cell>
-                                        <Table.Cell>{this.state.agent.os}</Table.Cell>
+                                        <Table.Cell>{store.agent.os}</Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
                                         <Table.Cell>Version</Table.Cell>
-                                        <Table.Cell>{this.state.agent.version}</Table.Cell>
+                                        <Table.Cell>{store.agent.version}</Table.Cell>
                                     </Table.Row>
                                 </Table.Body>
                             </Table>
@@ -188,7 +208,7 @@ export default class Agent extends Component {
                                 { attrs }
                             </Table.Body>
                         </Table>
-                    ) : (
+                    ) : this.state.activeItem === 'agent_environment' ? (
                         <Table compact celled fixed stackable selectable>
                             <Table.Header>
                                 <Table.Row>
@@ -200,9 +220,24 @@ export default class Agent extends Component {
                                 {env}
                             </Table.Body>
                         </Table>
-                    ) }
+                    ) : (
+                        <List divided relaxed>
+                            {compatibleconfigurations}
+                        </List>) }
                 </Segment>
             </Container>)
     }
 
+}
+
+Agent.propTypes = {
+    store : PropTypes.shape({
+        agent : PropTypes.object.isRequired   
+    })
+}
+
+Agent.defaultProps = {
+    store :{
+        agent : {}
+    }
 }

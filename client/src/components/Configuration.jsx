@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
-import axios from 'axios'
-import {Menu, Segment, Container, Icon, Button, Header, Input, Message, Form, Step, Popup, Modal} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
+import {Menu, Segment, Container, Icon, Button, Header, Input, Message, Form, Step, Popup, Modal, List} from 'semantic-ui-react'
 import { handleError } from 'commons/errorhandler'
-import { fetchConfiguration, updateConfiguration, addBuildStep, removeBuildStep, submitJob, addAgentFilter, removeAgentFilter } from 'api/api'
+import { fetchConfiguration, updateConfiguration, addBuildStep, removeBuildStep, submitJob, addAgentFilter, removeAgentFilter, fetchCompatibleAgents, updateBuildStep } from 'api/api'
 import AgentSelectionModal from 'components/AgentSelectionModal'
+import NoAgentsFound from 'components/NotFound'
+
 import CompatibleAgentsStore from 'stores/CompatibleAgentsStore'
 
 import PropTypes from 'prop-types'
@@ -13,28 +15,17 @@ import {observer} from 'mobx-react'
 //drag and drop functionality for build steps
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 
-const BuildStep = SortableElement(({step, sortIndex, onClickDeleteStep}) => 
-    <Step >
-        <Step.Content className='full-width'>
-            <Popup
-                trigger={<Button size='tiny' floated='right' color='red' icon='trash outline' onClick={(e)=> onClickDeleteStep(e, step._id)} />}
-                content='Delete Step'
-                inverted
-            /> 
-            <Step.Title>Step {sortIndex+1} </Step.Title>
-            <Step.Description> {'"' + step.command + ' '+ step.arguments + '" in '+step.commandDir} </Step.Description>
-        </Step.Content>
-    </Step>
-)
+import BuildStep from 'components/BuildStep'
 
-const BuildStepList = SortableContainer(({steps,onClickDeleteStep}) => 
+const BuildStepSortable = SortableElement((props) => <BuildStep {...props} />)
+
+const BuildStepList = SortableContainer(({steps,onClickDeleteStep, onSubmitEditBuildStep}) => 
     <Step.Group vertical fluid>
         {steps?steps.map((step, index) => (
-            <BuildStep key={`buildStep${index}`} index={index} step={step} sortIndex={index} onClickDeleteStep={onClickDeleteStep}/>
+            <BuildStepSortable key={`buildStep${index}`} index={index} step={step} sortIndex={index} onClickDeleteStep={onClickDeleteStep} onSubmitEditBuildStep={onSubmitEditBuildStep}/>
         )):null}
     </Step.Group>
 )
-
 
 const AgentFilter = ({filter, index, onClickDeleteAgentFilter}) => 
     <Step >
@@ -48,12 +39,14 @@ const AgentFilter = ({filter, index, onClickDeleteAgentFilter}) =>
         </Step.Content>
     </Step>
 
+
 const AgentFilterList = ({agentFilter,onClickDeleteAgentFilter}) => 
     <Step.Group vertical fluid>
         {agentFilter?agentFilter.map((filter, index) => (
             <AgentFilter key={`buildStep${index}`} index={index} filter={filter} onClickDeleteAgentFilter={onClickDeleteAgentFilter}/>
         )):null}
     </Step.Group>
+
 
 @observer
 class Configuration extends Component {
@@ -67,6 +60,13 @@ class Configuration extends Component {
     @autobind
     handleItemClick(e, {name}) {
         this.setState({activeItem: name})
+        if(name==='compatible_agents') {
+            const {store} = this.props
+            fetchCompatibleAgents(this.props.match.params.configurationName)
+                .then((compatibleAgents) => { 
+                    store.compatibleAgents = compatibleAgents
+                }).catch((error) => handleError(error))
+        }
     }
 
     @autobind
@@ -254,9 +254,30 @@ class Configuration extends Component {
         this.setState({openAgentSelection : false})
     }
 
+    @autobind
+    onSubmitEditBuildStep(stepIndex,buildStep) {
+        const {store} = this.props
+        store.configuration.buildSteps[stepIndex] = buildStep
+        const stepId = buildStep._id
+        delete buildStep._id
+        updateBuildStep(this.props.match.params.configurationName, stepId, buildStep)
+            .then((message)=> this.fetchConfigurationDetails())
+            .catch((error) => handleError(error))
+    }
+
     render() {
         const {activeItem} = this.state
         const {store} = this.props
+
+        const compatibleAgents = (!store.compatibleAgents || store.compatibleAgents.length == 0) ? <NoAgentsFound msg={'No Compatible Agents Found'}/> : store.compatibleAgents.map((agent) =>
+            <List.Item key={agent.name}>
+                <List.Icon name='github' size='large' verticalAlign='middle' />
+                <List.Content>
+                    <List.Header><Link to={`/agents/${agent.name}`}><strong>{agent.name}</strong></Link></List.Header>
+                    <List.Description>{agent.description}</List.Description>
+                </List.Content>
+            </List.Item>)
+
         return (
 
             <Container>
@@ -265,6 +286,8 @@ class Configuration extends Component {
                         onClick={this.handleItemClick}><Icon name="book"/>Configuration Details</Menu.Item>
                     <Menu.Item name='edit_buildsteps' active={activeItem === 'edit_buildsteps'}
                         onClick={this.handleItemClick}><Icon name="puzzle"/> Build Steps</Menu.Item>
+                    <Menu.Item name='compatible_agents' active={activeItem === 'compatible_agents'}
+                        onClick={this.handleItemClick}><Icon name="checkmark"/> Compatible Agents</Menu.Item>
                 </Menu>
 
                 <Segment attached='bottom'>
@@ -304,14 +327,14 @@ class Configuration extends Component {
                                 <Button onClick={this.onSubmitAddAgentFilter} inverted color='green' size="small">Add Filter</Button>
                             </Message>
                         </div>
-                    ) : (
+                    ) : activeItem === 'edit_buildsteps' ? (
                         <div>
                             <Input fluid
                                 label='Set Working Directory' placeholder='Path to working directory in Agent'
                                 action={<Button onClick={this.onSubmitWorkingDirChange} icon='folder' />}
                                 onChange={(e, data) => this.onChangeWorkingDir(e, data)}
                                 value={store.configuration.workingDir} />
-                            <BuildStepList steps={store.configuration.buildSteps} onSortEnd={this.onSortEnd} onClickDeleteStep={this.onClickDeleteStep} />
+                            <BuildStepList steps={store.configuration.buildSteps} onSortEnd={this.onSortEnd} onClickDeleteStep={this.onClickDeleteStep} onSubmitEditBuildStep={this.onSubmitEditBuildStep} />
                             <Message>
                                 <Form>
                                     <Form.Group widths='equal'>
@@ -336,6 +359,10 @@ class Configuration extends Component {
                                 <Button onClick={this.onSubmitAddBuildStep} inverted color='green' size="small">Add Build Step</Button>
                             </Message>
                         </div>
+                    ) : (
+                        <List divided relaxed>
+                            {compatibleAgents}
+                        </List>
                     )}
                 </Segment>
 

@@ -26,6 +26,8 @@ export const fetchConfiguration = (configName) => axios.get(clientConfig.apiUrl 
 
 export const updateConfiguration = (configName, data) => axios.put(clientConfig.apiUrl + `/configurations/${configName}`,data).then((success) =>  success.data.message  )
 
+export const updateBuildStep = (configName, stepid, data) => axios.put(clientConfig.apiUrl + `/configurations/${configName}/buildsteps/${stepid}`,data).then((success) =>  success.data.message  )
+
 export const addBuildStep = (configName,data) => axios.post(clientConfig.apiUrl + `/configurations/${configName}/buildsteps`,data).then((success) =>  success.data.message  )
 
 export const removeBuildStep = (configName,stepid) => axios.delete(clientConfig.apiUrl + `/configurations/${configName}/buildsteps/${stepid}`).then((success) =>  success.data.message  )
@@ -37,3 +39,11 @@ export const addAgentFilter = (configName,data) => axios.post(clientConfig.apiUr
 export const removeAgentFilter  = (configName,data) => axios.delete(clientConfig.apiUrl + `/configurations/${configName}/agentfilter`, data).then((success) =>  success.data.message  )
 
 export const fetchCompatibleAgents = (configName) => axios.get(clientConfig.apiUrl + `/configurations/${configName}/agents`).then((success) =>  success.data)
+
+export const fetchJobs = () => axios.get(clientConfig.agendashUrl).then((success) =>  success.data)
+
+export const requeueJob = (data) => axios.post(clientConfig.agendashUrl + '/jobs/requeue',data).then((success) =>  success.data)
+
+export const deleteJob = (data) => axios.post(clientConfig.agendashUrl + '/jobs/delete',data).then((success) =>  success.data)
+
+export const fetchJob = (jobId) => axios.get(`/agenda/api?jobid=${jobId}`).then((success) =>  success.data)

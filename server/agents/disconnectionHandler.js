@@ -58,10 +58,9 @@ function disconnectionHandlerAfterJobStart(job,socket,done) {
                 }
             }
         })
-        
-        
-        if(job) {
-            done(new Error('Agent Disconnected!'))
+
+        if(job && job.attrs.lockedAt!=null) {
+            log(job, 'Agent Disconnected' , function(err) {done(new Error('Agent Disconnected!')) })
         }
         
         agenda.stop(function() {
@@ -70,6 +69,15 @@ function disconnectionHandlerAfterJobStart(job,socket,done) {
         })
     }
 
+}
+
+
+function log(job, msg, cb) {
+    if(job.attrs.data.log)
+        job.attrs.data.log = job.attrs.data.log + msg
+    else 
+        job.attrs.data.log = msg
+    job.save(cb)
 }
 
 module.exports = {

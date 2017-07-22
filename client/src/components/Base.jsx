@@ -9,10 +9,16 @@ import CreateConfiguration from 'components/CreateConfiguration'
 import Configuration from 'components/Configuration'
 import NotFound from 'components/NotFound'
 import Login from 'components/Login'
+import Jobs from 'components/Jobs'
+import JobDetails from 'components/JobDetails'
 
 import {observer} from 'mobx-react'
 import HomeStore from 'stores/HomeStore'
 import ConfigurationStore from 'stores/ConfigurationStore'
+import AgentsStore from 'stores/AgentsStore'
+import AgentStore from 'stores/AgentStore'
+import JobStore from 'stores/JobStore'
+import JobDetailsStore from 'stores/JobDetailsStore'
 import PropTypes from 'prop-types'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -59,11 +65,13 @@ class Base extends Component {
 
                 <Switch>
                     <PropsRoute exact path='/' component={Home} store={HomeStore} />
-                    <Route exact path='/agents' component={Agents} />
-                    <Route path='/agents/:agentName' component={Agent} />
+                    <PropsRoute exact path='/agents' component={Agents} store={AgentsStore}/>
+                    <PropsRoute exact path='/jobs' component={Jobs} store={JobStore}/>
+                    <PropsRoute exact path='/jobs/:jobId' component={JobDetails} store={JobDetailsStore}/>
+                    <PropsRoute path='/agents/:agentName' component={Agent} store={AgentStore}/>
                     <Route path='/createconfiguration' component={CreateConfiguration} />
                     <Route path='/createproject' component={CreateProject} />
-                    <PropsRoute exact path='/configuration/:configurationName' component={Configuration} store={ConfigurationStore} />
+                    <PropsRoute exact path='/configurations/:configurationName' component={Configuration} store={ConfigurationStore} />
                     <Route exact path='/login' component={Login} />
                     <Route component={() => (<NotFound msg="Page Not Found" />)} />
                 </Switch>

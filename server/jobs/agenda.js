@@ -1,5 +1,7 @@
 var Agenda = require('agenda')
 var config = require('../config')
+var Agent = require('../models/Agent')
+
 var agenda = new Agenda(config.mongo)
 agenda.processEvery ('10 seconds')
 
@@ -21,10 +23,23 @@ agenda.defaultConcurrency(1)
 
 function shutDownAgenda() {
     agenda.stop(function() {
-        process.exit(0)
+        
+        Agent.update({isAuthorized : true}, {$set: {isConnected : false}}, {'multi': true}, function (err) {
+            if (err) {
+                process.exit(1)
+            }
+            Agent.remove({isAuthorized : false}, function (err) {
+                if (err) {
+                    process.exit(1)
+                }
+                process.exit(0)
+            })
+        })
     })
 }
 
+
+process.on('uncaughtException', shutDownAgenda)
 process.on('SIGTERM', shutDownAgenda)
 process.on('SIGINT' , shutDownAgenda)
 

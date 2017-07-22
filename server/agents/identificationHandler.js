@@ -1,6 +1,7 @@
 var Agent = require('../models/Agent')
+var defineAgentProcessor = require('../jobs/jobManager').defineAgentProcessor
 
-function handleIdentification(socket) {
+function handleIdentification(socket, SocketIO) {
     return function(connectedAgent) {
         connectedAgent.ipAddress = socket.conn.remoteAddress.replace(/^.*:/, '')
         connectedAgent.isConnected = true
@@ -18,6 +19,7 @@ function handleIdentification(socket) {
                         socket.emit('exception', err.message)
                         return
                     }
+                    defineAgentProcessor(socket, SocketIO)
                 })
             } else {
                 if (registeredAgent.isConnected) {
@@ -29,6 +31,7 @@ function handleIdentification(socket) {
                             socket.emit('exception', err.message)
                             return
                         }
+                        defineAgentProcessor(socket, SocketIO)
                     })
                 }
             }

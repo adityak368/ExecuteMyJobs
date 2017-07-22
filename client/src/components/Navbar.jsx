@@ -27,7 +27,7 @@ export default class Navbar extends Component {
 
     render() {
         return (
-            <Menu stackable size='huge'>
+            <Menu stackable size='huge' >
                 <Menu.Item >
                     <Link to={'/'}><Icon name="product hunt" />  Execute My Jobs</Link>
                 </Menu.Item>
@@ -36,7 +36,7 @@ export default class Navbar extends Component {
                     <Icon name="desktop" /> Agents <Label color='blue'> {this.state.agentCount} </Label>
                 </Menu.Item>
 
-                <Menu.Item name='jobs' active={this.state.activeItem === 'jobs'}  as='a' href='/jobs'>
+                <Menu.Item name='jobs' active={this.state.activeItem === 'jobs'}  onClick={this.handleItemClick}>
                     <Icon name="announcement" /> Jobs
                 </Menu.Item>
 

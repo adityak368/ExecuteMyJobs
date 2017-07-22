@@ -223,6 +223,15 @@ router.route('/configurations/:configuration/buildsteps/:stepid').delete(functio
             res.json({message:'Successfully Removed Build Step'})
         })
     })
+}).put(function(req,res) {
+
+    BuildStep.replaceOne({_id:req.params.stepid}, req.body , function (err, step) {
+        if(err) {
+            res.status(500).json({message:err.message})
+            return
+        }
+        res.json({message:'Successfully Updated Build Step'})
+    })
 })
 
 router.route('/configurations/:configuration/agentfilter').get(function(req, res) {
@@ -241,7 +250,7 @@ router.route('/configurations/:configuration/agentfilter').get(function(req, res
 
 }).post(function(req,res) {
 
-    Configuration.findOneAndUpdate({name:req.params.configuration},{ '$push': { agentFilter: req.body } }, function (err, configuration) {
+    Configuration.findOneAndUpdate({name:req.params.configuration},{ '$addToSet': { agentFilter: req.body } }, function (err, configuration) {
         if(err) {
             res.status(500).json({message:err.message})
             return
@@ -251,7 +260,7 @@ router.route('/configurations/:configuration/agentfilter').get(function(req, res
 
 }).delete(function(req,res) {
 
-    Configuration.findOneAndUpdate({name:req.params.configuration},{ '$pull' : { 'agentFilter' : { '_id' :  mongoose.Types.ObjectId(req.query._id) } } }, function (err, configuration) {
+    Configuration.findOneAndUpdate({name:req.params.configuration},{ '$pull' : { 'agentFilter' : req.query  } }, function (err, configuration) {
         if(err) {
             res.status(500).json({message:err.message})
             return
@@ -299,17 +308,34 @@ router.route('/agents/count').get(function(req, res) {
 
 router.route('/agents/:agent').get(function(req, res) {
 
-    Agent.findOne({name:req.params.agent},function (err, agent) {
+    Agent.aggregate([ { $match : {name:req.params.agent} },
+        {'$limit' : 1},
+        {'$addFields' : { 'otherAttributes' : { 'os' : '$os','name' : '$name','version': '$version' } } },
+        {'$addFields' : { 'allattributes' : { '$setUnion' : [ {'$objectToArray' :  '$env'}, {'$objectToArray' :  '$attributes'}, {'$objectToArray' :  '$otherAttributes'} ]} } }], function (err, agents) {
         if(err) {
             res.status(500).json({message:err.message})
             return
         }
-        if(!agent) {
+        if(!agents) {
             res.status(500).json({message:'Could Not Find Agent!'})
             return
         }
-        res.json(agent)
-    }).select('-__v')
+
+        Configuration.aggregate([ 
+            { $project: { isCompatible: { $cond : [ { $ifNull: [ '$agentFilter', false ] } , {'$setIsSubset' : [ '$agentFilter', agents[0].allattributes ] }, true ]} ,name: 1, description: 1 } }, 
+            { $match : { isCompatible : true } }
+        ], function (err, compatibleConfigurations) {
+            if(err) {
+                console.log(err)
+                res.status(500).json({message:err.message})
+                return
+            }
+            delete agents[0].allattributes
+            delete agents[0].otherAttributes
+            agents[0].compatibleConfigurations = compatibleConfigurations
+            res.json(agents[0])
+        })
+    })
 
 }).put(function (req,res) {
     Agent.findOneAndUpdate({name:req.params.agent},req.body, function (err, agent) {

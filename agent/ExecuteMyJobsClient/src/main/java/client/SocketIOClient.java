@@ -9,7 +9,6 @@ import handlers.SocketIOClientConnectedHandler;
 import handlers.SocketIOClientDisconnectedHandler;
 import handlers.SocketIOClientErrorHandler;
 import handlers.SocketIOClientExceptionHandler;
-import handlers.SocketIOClientPauseJobHandler;
 import handlers.SocketIOClientStartJobHandler;
 import handlers.SocketIOClientStatusHandler;
 import handlers.SocketIOClientStopJobHandler;
@@ -57,7 +56,6 @@ public class SocketIOClient {
 		//job handlers
 		eventHandlerMap.put(EventDefs.START_JOB, new SocketIOClientStartJobHandler(mSocket,mConfigsLoader,EventDefs.START_JOB));
 		eventHandlerMap.put(EventDefs.STOP_JOB, new SocketIOClientStopJobHandler(mSocket,mConfigsLoader,EventDefs.STOP_JOB));
-		eventHandlerMap.put(EventDefs.PAUSE_JOB, new SocketIOClientPauseJobHandler(mSocket,mConfigsLoader,EventDefs.PAUSE_JOB));
 		
 		//status handlers
 		eventHandlerMap.put(EventDefs.STATUS, new SocketIOClientStatusHandler(mSocket,mConfigsLoader,EventDefs.STATUS));

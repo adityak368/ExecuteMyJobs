@@ -13,7 +13,7 @@ var configurationSchema = new Schema({
         required: 'Please Enter a Configuration Description!'},
     workingDir: {  type: String,
         trim: true},
-    agentFilter : [{
+    agentFilter : [new Schema({
         k: {
             type: String,
             required: true 
@@ -22,7 +22,7 @@ var configurationSchema = new Schema({
             type: String,
             required: true 
         }
-    }],
+    }, { _id : false})],
     buildSteps: [ { type : Schema.ObjectId, ref: 'BuildStep'} ]
 },{ timestamps: true })
 
