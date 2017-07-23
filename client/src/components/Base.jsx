@@ -21,6 +21,8 @@ import JobStore from 'stores/JobStore'
 import JobDetailsStore from 'stores/JobDetailsStore'
 import PropTypes from 'prop-types'
 
+const socket = io('http://localhost:3000/browser', {query : 'password=ExecuteMyJobsAgent', path : '/ExecuteByJobs/socket.io'})
+
 const PrivateRoute = ({ component: Component, ...rest }) => {
 
     return <Route {...rest} render={(props) => (
@@ -54,7 +56,6 @@ const PropsRoute = ({ component, ...rest }) => {
 class Base extends Component {
    
     componentDidMount() {
-
     }
 
     render() {
@@ -66,8 +67,8 @@ class Base extends Component {
                 <Switch>
                     <PropsRoute exact path='/' component={Home} store={HomeStore} />
                     <PropsRoute exact path='/agents' component={Agents} store={AgentsStore}/>
-                    <PropsRoute exact path='/jobs' component={Jobs} store={JobStore}/>
-                    <PropsRoute exact path='/jobs/:jobId' component={JobDetails} store={JobDetailsStore}/>
+                    <PropsRoute exact path='/jobs' component={Jobs} store={JobStore} socket={socket}/>
+                    <PropsRoute exact path='/jobs/:jobId' component={JobDetails} store={JobDetailsStore} socket={socket}/>
                     <PropsRoute path='/agents/:agentName' component={Agent} store={AgentStore}/>
                     <Route path='/createconfiguration' component={CreateConfiguration} />
                     <Route path='/createproject' component={CreateProject} />

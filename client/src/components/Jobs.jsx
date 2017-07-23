@@ -134,14 +134,11 @@ export default class Jobs extends Component {
 
     componentDidMount() {
         this.loadJobs()
-        let updateHandler = setInterval(this.loadJobs, 3000)
-        this.setState({updateHandler})
+        this.props.socket.on('update', this.loadJobs)
     }
 
     componentWillUnmount() {
-        if(this.state.updateHandler) {
-            clearInterval(this.state.updateHandler)
-        }
+        this.props.socket.removeListener('update', this.loadJobs)
     }
 
     @autobind

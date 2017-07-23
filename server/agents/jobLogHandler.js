@@ -1,6 +1,7 @@
-function jobLogHandler(job,socket) {
+function jobLogHandler(job,socket,SocketIO) {
     return function(response) {
         log(job,response)
+        SocketIO.of('/browser').emit('updateJobDetails', job)
     }
 }
 

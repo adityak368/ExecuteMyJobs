@@ -1,6 +1,7 @@
 var Agenda = require('agenda')
 var config = require('../config')
 var Agent = require('../models/Agent')
+var fs = require('fs')
 
 var agenda = new Agenda(config.mongo)
 agenda.processEvery ('10 seconds')
@@ -21,7 +22,13 @@ agenda.undefine = function(name) {
 
 agenda.defaultConcurrency(1)
 
-function shutDownAgenda() {
+function shutDownAgenda(err) {
+    if(err) {
+        console.log(err)
+        var logErrorToFile=fs.createWriteStream(__dirname + '/error.log',{flags:'a'}) 
+        logErrorToFile.write('Caught exception: '+ err.message + '\n' + err.stack)
+        logErrorToFile.close()
+    }
     agenda.stop(function() {
         
         Agent.update({isAuthorized : true}, {$set: {isConnected : false}}, {'multi': true}, function (err) {
@@ -37,7 +44,6 @@ function shutDownAgenda() {
         })
     })
 }
-
 
 process.on('uncaughtException', shutDownAgenda)
 process.on('SIGTERM', shutDownAgenda)

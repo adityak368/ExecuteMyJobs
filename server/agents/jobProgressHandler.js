@@ -1,6 +1,7 @@
-function jobProgressHandler(job,socket) {
+function jobProgressHandler(job,socket,SocketIO) {
     return function(response) {
         progress(job, response)
+        SocketIO.of('/browser').emit('updateJobDetails', job)
     }
 }
 

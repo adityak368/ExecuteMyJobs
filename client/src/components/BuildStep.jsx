@@ -30,7 +30,7 @@ export default class BuildStep extends Component {
     }
 
     @autobind
-    onClickCancelEditStep(e, stepId) {
+    onClickCancelEditStep(e, data) {
         this.setState({isEditVisible:false})
         let buildStep = {command: '', arguments: '', commandDir: ''}
         this.setState({buildStep})

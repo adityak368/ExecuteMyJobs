@@ -1,0 +1,70 @@
+Caught exception: Cannot read property 'running' of undefined
+Caught exception: Cannot read property 'running' of undefined
+TypeError: Cannot read property 'running' of undefined
+    at processJobResult (E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\agenda.js:681:26)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\job.js:191:17
+    at processDbResult (E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\agenda.js:391:7)
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\collection.js:2494:14
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\db.js:314:5
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb-core\lib\connection\pool.js:461:18
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)Caught exception: Cannot read property 'running' of undefined
+TypeError: Cannot read property 'running' of undefined
+    at processJobResult (E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\agenda.js:681:26)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\job.js:191:17
+    at processDbResult (E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\agenda.js:391:7)
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\collection.js:2494:14
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\db.js:314:5
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb-core\lib\connection\pool.js:461:18
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)Caught exception: setTimeOut is not defined
+ReferenceError: setTimeOut is not defined
+    at E:\Development\Nodejs\ExecuteMyJobs\server\agents\disconnectionHandler.js:72:13
+    at processDbResult (E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\agenda.js:391:7)
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\collection.js:2494:14
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\db.js:314:5
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb-core\lib\connection\pool.js:461:18
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)Caught exception: Cannot read property 'message' of undefined
+TypeError: Cannot read property 'message' of undefined
+    at process.shutDownAgenda (E:\Development\Nodejs\ExecuteMyJobs\server\jobs\agenda.js:28:51)
+    at emitNone (events.js:86:13)
+    at process.emit (events.js:188:7)
+    at Signal.wrap.onsignal (internal/process.js:215:44)Caught exception: defineAgentProcessor is not a function
+TypeError: defineAgentProcessor is not a function
+    at E:\Development\Nodejs\ExecuteMyJobs\server\agents\identificationHandler.js:34:25
+    at model.Query.callback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongoose\lib\query.js:2612:9)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\kareem\index.js:277:21
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\kareem\index.js:131:16
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)Caught exception: defineAgentProcessor is not a function
+TypeError: defineAgentProcessor is not a function
+    at E:\Development\Nodejs\ExecuteMyJobs\server\agents\identificationHandler.js:34:25
+    at model.Query.callback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongoose\lib\query.js:2612:9)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\kareem\index.js:277:21
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\kareem\index.js:131:16
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)Caught exception: defineAgentProcessor is not a function
+TypeError: defineAgentProcessor is not a function
+    at E:\Development\Nodejs\ExecuteMyJobs\server\agents\identificationHandler.js:34:25
+    at model.Query.callback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongoose\lib\query.js:2612:9)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\kareem\index.js:277:21
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\kareem\index.js:131:16
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)Caught exception: agenda is not defined
+ReferenceError: agenda is not defined
+    at E:\Development\Nodejs\ExecuteMyJobs\server\agents\disconnectionHandler.js:71:13
+    at processDbResult (E:\Development\Nodejs\ExecuteMyJobs\node_modules\agenda\lib\agenda.js:391:7)
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\collection.js:2494:14
+    at handleCallback (E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\utils.js:120:56)
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\db.js:314:5
+    at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb-core\lib\connection\pool.js:461:18
+    at _combinedTickCallback (internal/process/next_tick.js:73:7)
+    at process._tickCallback (internal/process/next_tick.js:104:9)

@@ -1,7 +1,8 @@
-function jobCompletedHandler(job,socket,done) {
+function jobCompletedHandler(job,socket,SocketIO,done) {
     return function(response) {
         progress(job, 100)
         done()
+        SocketIO.of('/browser').emit('update', job)
     }
 }
 

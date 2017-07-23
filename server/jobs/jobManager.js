@@ -6,27 +6,23 @@ var jobErrorHandler = require('../agents/jobErrorHandler')
 var statusHandler = require('../agents/statusHandler')
 var disconnectionHandler = require('../agents/disconnectionHandler')
 
-function defineAgentProcessor(clientSocket,SocketIO) {
-    agenda.define(clientSocket.handshake.query.name, function(job,done) {
+function defineAgentProcessor(socket,SocketIO) {
+    agenda.define(socket.handshake.query.name, function(job,done) {
         console.log('Processing Job ' + job.attrs._id)
-
-        var clients = SocketIO.sockets.adapter.rooms[job.attrs.data.agent]
-        if(clients) {
-            var socket = SocketIO.sockets.sockets[Object.keys(clients.sockets)[0]]
-            socket.removeAllListeners()
-            job.attrs.data.log = ''
-            job.attrs.data.progress = 0
-            job.save()
-            socket.on('disconnect', disconnectionHandler.disconnectionHandlerAfterJobStart(job,clientSocket,done))
-            socket.on('joblog', jobLogHandler(job,socket))
-            socket.on('jobprogress', jobProgressHandler(job,socket) )
-            socket.on('jobcompleted',jobCompletedHandler(job,socket,done) )
-            socket.on('joberror', jobErrorHandler(job,socket,done))
-            socket.on('status', statusHandler(job,socket))
-            
-            socket.emit('status', job)  
-            console.log('Checking Agent Availability')
-        }
+        SocketIO.of('/browser').emit('update', {job : job})
+        socket.removeAllListeners()
+        job.attrs.data.log = ''
+        job.attrs.data.progress = 0
+        job.save()
+        socket.on('disconnect', disconnectionHandler.disconnectionHandlerAfterJobStart(job,socket,SocketIO,done))
+        socket.on('joblog', jobLogHandler(job,socket,SocketIO))
+        socket.on('jobprogress', jobProgressHandler(job,socket,SocketIO) )
+        socket.on('jobcompleted',jobCompletedHandler(job,socket,SocketIO,done) )
+        socket.on('joberror', jobErrorHandler(job,socket,SocketIO,done))
+        socket.on('status', statusHandler(job,socket))
+        
+        socket.emit('status', job)  
+        console.log('Checking Agent Availability')
     })
 }
 

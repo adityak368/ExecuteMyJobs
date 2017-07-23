@@ -15,14 +15,17 @@ export default class JobDetails extends Component {
     
     componentDidMount() {
         this.loadJob()
-        let timeoutId = setInterval(this.loadJob, 3000)
-        this.setState({timeoutId})
+        this.props.socket.on('updateJobDetails', this.refreshJob)
     }
 
     componentWillUnmount() {
-        if(this.state.timeoutId) {
-            clearInterval(this.state.timeoutId)
-        }
+        this.props.socket.removeListener('updateJobDetails', this.refreshJob)
+    }
+
+    @autobind
+    refreshJob(job) {
+        if(job._id===this.props.match.params.jobId)
+            this.loadJob()
     }
 
     @autobind

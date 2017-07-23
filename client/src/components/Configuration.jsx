@@ -16,6 +16,7 @@ import {observer} from 'mobx-react'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 
 import BuildStep from 'components/BuildStep'
+import AgentFilter from 'components/AgentFilter'
 
 const BuildStepSortable = SortableElement((props) => <BuildStep {...props} />)
 
@@ -27,25 +28,13 @@ const BuildStepList = SortableContainer(({steps,onClickDeleteStep, onSubmitEditB
     </Step.Group>
 )
 
-const AgentFilter = ({filter, index, onClickDeleteAgentFilter}) => 
-    <Step >
-        <Step.Content className='full-width'>
-            <Popup
-                trigger={<Button size='tiny' floated='right' color='red' icon='trash outline' onClick={(e)=> onClickDeleteAgentFilter(e, filter)} />}
-                content='Delete Filter'
-                inverted
-            /> 
-            <Step.Title>{ filter.k + ' = '+ filter.v}</Step.Title>
-        </Step.Content>
-    </Step>
-
-
-const AgentFilterList = ({agentFilter,onClickDeleteAgentFilter}) => 
+const AgentFilterList = ({agentFilter,onClickDeleteAgentFilter, onSubmitEditAgentFilter}) => 
     <Step.Group vertical fluid>
         {agentFilter?agentFilter.map((filter, index) => (
-            <AgentFilter key={`buildStep${index}`} index={index} filter={filter} onClickDeleteAgentFilter={onClickDeleteAgentFilter}/>
+            <AgentFilter key={`agentFilter${index}`} index={index} filter={filter} onClickDeleteAgentFilter={onClickDeleteAgentFilter} onSubmitEditAgentFilter={onSubmitEditAgentFilter}/>
         )):null}
     </Step.Group>
+
 
 
 @observer
@@ -255,6 +244,16 @@ class Configuration extends Component {
     }
 
     @autobind
+    onSubmitEditAgentFilter(filterIndex,filter) {
+        const {store} = this.props
+        store.configuration.agentFilter[filterIndex] = filter
+        updateConfiguration(this.props.match.params.configurationName, {
+            agentFilter : store.configuration.agentFilter
+        }).then((message)=> this.fetchConfigurationDetails())
+            .catch((error) => handleError(error))
+    }
+
+    @autobind
     onSubmitEditBuildStep(stepIndex,buildStep) {
         const {store} = this.props
         store.configuration.buildSteps[stepIndex] = buildStep
@@ -308,7 +307,7 @@ class Configuration extends Component {
                             <Header floated='right'>
                                 <Button onClick={this.onClickSubmitJob} inverted color='green' size="small" floated='right' icon='space shuttle' content='Submit Job' />
                             </Header>
-                            <AgentFilterList agentFilter={store.configuration.agentFilter} onClickDeleteAgentFilter={this.onClickDeleteAgentFilter}/>
+                            <AgentFilterList agentFilter={store.configuration.agentFilter} onClickDeleteAgentFilter={this.onClickDeleteAgentFilter} onSubmitEditAgentFilter={this.onSubmitEditAgentFilter}/>
                             <Message>
                                 <Form>
                                     <Form.Group widths='equal'>
