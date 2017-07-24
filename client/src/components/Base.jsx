@@ -21,7 +21,7 @@ import JobStore from 'stores/JobStore'
 import JobDetailsStore from 'stores/JobDetailsStore'
 import PropTypes from 'prop-types'
 
-const socket = io('http://localhost:3000/browser', {query : 'password=ExecuteMyJobsAgent', path : '/ExecuteByJobs/socket.io'})
+const socket = io('http://localhost:3000/browser', {query : 'password=ExecuteMyJobsAgent', path : '/ExecuteByJobs/socket.io', transports: ['websocket']})
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
 

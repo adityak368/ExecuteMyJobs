@@ -67,4 +67,34 @@ ReferenceError: agenda is not defined
     at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb\lib\db.js:314:5
     at E:\Development\Nodejs\ExecuteMyJobs\node_modules\mongodb-core\lib\connection\pool.js:461:18
     at _combinedTickCallback (internal/process/next_tick.js:73:7)
-    at process._tickCallback (internal/process/next_tick.js:104:9)
+    at process._tickCallback (internal/process/next_tick.js:104:9)Caught exception: log is not a function
+TypeError: log is not a function
+    at Socket.<anonymous> (C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\server\agents\jobLogHandler.js:3:9)
+    at emitOne (events.js:96:13)
+    at Socket.emit (events.js:188:7)
+    at C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\node_modules\socket.io\lib\socket.js:514:12
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)Caught exception: job.attrs.data.log.push is not a function
+TypeError: job.attrs.data.log.push is not a function
+    at log (C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\server\agents\jobLogHandler.js:9:24)
+    at Socket.<anonymous> (C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\server\agents\jobLogHandler.js:3:9)
+    at emitOne (events.js:96:13)
+    at Socket.emit (events.js:188:7)
+    at C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\node_modules\socket.io\lib\socket.js:514:12
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)Caught exception: Cannot read property 'replace' of undefined
+TypeError: Cannot read property 'replace' of undefined
+    at Namespace.<anonymous> (C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\server\agents\agenttrack.js:6:77)
+    at emitOne (events.js:96:13)
+    at Namespace.emit (events.js:188:7)
+    at Namespace.emit (C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\node_modules\socket.io\lib\namespace.js:212:10)
+    at C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\node_modules\socket.io\lib\namespace.js:180:14
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)Caught exception: Cannot read property 'replace' of undefined
+TypeError: Cannot read property 'replace' of undefined
+    at Socket.<anonymous> (C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\server\agents\identificationHandler.js:6:61)
+    at emitOne (events.js:96:13)
+    at Socket.emit (events.js:188:7)
+    at C:\Users\akoodlu\Documents\Angular\ExecuteMyJobs\node_modules\socket.io\lib\socket.js:514:12
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+    at process._tickCallback (internal/process/next_tick.js:98:9)

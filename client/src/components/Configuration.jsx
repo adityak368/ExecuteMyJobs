@@ -105,6 +105,10 @@ class Configuration extends Component {
         e.preventDefault()
         const {store} = this.props
         if (this.props.match.params.configurationName) {
+            if(!this.state.buildStep.command.trim() || !this.state.buildStep.commandDir.trim()) {
+                toastr.error('Please Add all the required details (Command and Command Directory) for the Build Step!', 'Error!')
+                return
+            }
             addBuildStep(this.props.match.params.configurationName, this.state.buildStep)
                 .then((message) => { 
                     this.fetchConfigurationDetails()
@@ -246,6 +250,9 @@ class Configuration extends Component {
     @autobind
     onSubmitEditAgentFilter(filterIndex,filter) {
         const {store} = this.props
+        if(!this.state.agentFilter.k.trim() || !this.state.agentFilter.v.trim()) {
+            toastr.error('Both fields are required', 'Error!') 
+        }
         store.configuration.agentFilter[filterIndex] = filter
         updateConfiguration(this.props.match.params.configurationName, {
             agentFilter : store.configuration.agentFilter
@@ -256,6 +263,10 @@ class Configuration extends Component {
     @autobind
     onSubmitEditBuildStep(stepIndex,buildStep) {
         const {store} = this.props
+        if(!this.state.buildStep.command.trim() || !this.state.buildStep.commandDir.trim()) {
+            toastr.error('Please Add all the required details (Command and Command Directory) for the Build Step!', 'Error!')
+            return
+        }
         store.configuration.buildSteps[stepIndex] = buildStep
         const stepId = buildStep._id
         delete buildStep._id
@@ -311,12 +322,12 @@ class Configuration extends Component {
                             <Message>
                                 <Form>
                                     <Form.Group widths='equal'>
-                                        <Form.Field>
+                                        <Form.Field required>
                                             <Input name="agentAttribute"
                                                 value={this.state.agentFilter.k}
                                                 onChange={(e,data) => this.onChangeAgentFilter(data,'agentAttribute')} placeholder='Agent Attribute' required/>
                                         </Form.Field>
-                                        <Form.Field>
+                                        <Form.Field required>
                                             <Input name="agentAttributeValue"
                                                 value={this.state.agentFilter.v}
                                                 onChange={(e,data) =>this.onChangeAgentFilter(data,'agentAttributeValue')} placeholder='Agent Attribute Value' required/>
@@ -337,7 +348,7 @@ class Configuration extends Component {
                             <Message>
                                 <Form>
                                     <Form.Group widths='equal'>
-                                        <Form.Field>
+                                        <Form.Field required>
                                             <Input name="command"
                                                 value={this.state.buildStep.command}
                                                 required="true"
@@ -348,7 +359,7 @@ class Configuration extends Component {
                                                 value={this.state.buildStep.arguments}
                                                 onChange={(e,data) =>this.onChangeBuildStep(data,'args')} placeholder='Arguments'/>
                                         </Form.Field>
-                                        <Form.Field>
+                                        <Form.Field required>
                                             <Input name="commandDir"
                                                 value={this.state.buildStep.commandDir}
                                                 onChange={(e,data) => this.onChangeBuildStep(data,'commandDir')} placeholder='Execution directory of the command'/>
@@ -382,7 +393,7 @@ class Configuration extends Component {
                     </Modal.Actions>
                 </Modal>
 
-                <AgentSelectionModal store={CompatibleAgentsStore} open={this.state.openAgentSelection} onCloseAgentSelectionModal={this.onCloseAgentSelectionModal} configuration={store.configuration}/>
+                <AgentSelectionModal isBuildStepAdded={(store.configuration.buildSteps && store.configuration.buildSteps.length>0)?true:false} store={CompatibleAgentsStore} open={this.state.openAgentSelection} onCloseAgentSelectionModal={this.onCloseAgentSelectionModal} configuration={store.configuration}/>
             </Container> )
     }
 

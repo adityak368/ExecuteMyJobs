@@ -79,18 +79,18 @@ export default class BuildStep extends Component {
                         <Message>
                             <Form>
                                 <Form.Group widths='equal'>
-                                    <Form.Field>
+                                    <Form.Field required>
                                         <Input name="command"
                                             value={this.state.buildStep.command}
                                             required="true"
                                             onChange={(e,data) => this.onChangeBuildStep(data,'command')} placeholder='Command'/>
                                     </Form.Field>
-                                    <Form.Field>
+                                    <Form.Field >
                                         <Input name="args"
                                             value={this.state.buildStep.arguments}
                                             onChange={(e,data) =>this.onChangeBuildStep(data,'args')} placeholder='Arguments'/>
                                     </Form.Field>
-                                    <Form.Field>
+                                    <Form.Field required>
                                         <Input name="commandDir"
                                             value={this.state.buildStep.commandDir}
                                             onChange={(e,data) => this.onChangeBuildStep(data,'commandDir')} placeholder='Execution directory of the command'/>

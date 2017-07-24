@@ -3,7 +3,8 @@ var Agent = require('../models/Agent')
 
 function disconnectionHandlerOnConnect(socket) {
     return function() {
-        console.log('Agent '+socket.conn.remoteAddress.replace(/^.*:/, '')+ ' disconnected!')
+        ///console.log('Agent '+socket.conn.remoteAddress.replace(/^.*:/, '')+ ' disconnected!')
+        console.log('Agent Disconnected ' + socket.handshake.query.name)
         Agent.findOne({name: socket.handshake.query.name}, function (err, agent) {
             if (err) {
                 socket.emit('exception', err.message)
@@ -34,7 +35,8 @@ function disconnectionHandlerOnConnect(socket) {
 
 function disconnectionHandlerAfterJobStart(job,socket,SocketIO,done) {
     return function() {
-        console.log('Agent '+socket.conn.remoteAddress.replace(/^.*:/, '')+ ' disconnected!')
+        //console.log('Agent '+socket.conn.remoteAddress.replace(/^.*:/, '')+ ' disconnected!')
+        console.log('Agent Disconnected ' + socket.handshake.query.name)
         Agent.findOne({name: socket.handshake.query.name}, function (err, agent) {
             if (err) {
                 console.log(err.message)
@@ -81,10 +83,15 @@ function cleanupDisconnection(job,socket,SocketIO,done) {
 }
 
 function log(job, msg, cb) {
-    if(job.attrs.data.log)
-        job.attrs.data.log = job.attrs.data.log + msg
-    else 
-        job.attrs.data.log = msg
+    var log = {
+        timestamp : new Date().toISOString(),
+        step : 'Failed',
+        log : msg,
+        command : 'NA'
+    }
+    if(!job.attrs.data.log)
+        job.attrs.data.log = []
+    job.attrs.data.log.push(log)
     job.save(cb)
 }
 

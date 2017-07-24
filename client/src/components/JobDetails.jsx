@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import queryString from 'query-string'
 import {fetchJob} from 'api/api'
+import { handleError } from 'commons/errorhandler'
 import JobDetailsContainer from 'components/JobDetailsStatistic'
-import {Container, Icon, Grid, Message} from 'semantic-ui-react'
+import {Container, Icon, Grid, Message, Accordion} from 'semantic-ui-react'
 
 import {observer, PropTypes as MobxPropTypes} from 'mobx-react'
 import PropTypes from 'prop-types'
@@ -38,22 +39,27 @@ export default class JobDetails extends Component {
 
     render() {
         const store = this.props.store
+        const logs = (store.jobdata.length>0 && store.jobdata[0].job.data.log) ? store.jobdata[0].job.data.log.map((logitem,index) => ({
+            key: `log-${index}`,
+            title: <strong>{`[${new Date(logitem.timestamp).toLocaleString()}]: ${logitem.step} => ${logitem.command}`}</strong>,
+            content: <pre>{logitem.log}</pre>,
+        })) : []
         return (
             <Container>
                 <Grid centered columns={1}>
                     <Grid.Column>
                         <JobDetailsContainer data={store.jobdata.length>0 ? store.jobdata[0] : {}}/>
                     </Grid.Column>
-
+                    <Message.Header>
+                        <strong>{ store.jobdata.length>0 ? store.jobdata[0].job.failReason : null}</strong>
+                    </Message.Header>
                     <Grid.Row centered columns={1}>
                         <Grid.Column>
                             <Message>
                                 <Message.Header>
                                     Job Log
                                 </Message.Header>
-                                <pre>
-                                    { store.jobdata.length>0 ? store.jobdata[0].job.data.log : '' }
-                                </pre>
+                                <Accordion panels={logs} exclusive={false} fluid /> 
                             </Message>
                         </Grid.Column>
                     </Grid.Row>

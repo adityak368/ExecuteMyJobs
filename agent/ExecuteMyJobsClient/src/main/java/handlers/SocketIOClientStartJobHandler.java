@@ -4,8 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -47,26 +53,42 @@ public class SocketIOClientStartJobHandler implements IEventHandler {
 						manager.setBusy(true);
 					}
 					
+//					try {
+//						for (int i = 0; i < 10; i++) {
+//							Thread.sleep(1000);
+//							try {
+//								JSONObject log = new JSONObject();
+//								log.put("command", "Test");
+//								log.put("timestamp", getTimeStamp());
+//								log.put("step", "Step" + Integer.toString(i));
+//								log.put("log", "Log " + Integer.toString(i));
+//								mSocket.emit(EventDefs.JOB_LOG, log);
+//								mSocket.emit(EventDefs.JOB_PROGRESS, i*10);
+//							} catch (JSONException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//
+//						}
+//
+//						mSocket.emit(EventDefs.JOB_COMPLETE, "Complete");
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//						if(manager!=null) {
+//							manager.setBusy(false);
+//						}
 					try {
-						for (int i = 0; i < 10; i++) {
-							Thread.sleep(1000);
-							mSocket.emit(EventDefs.JOB_LOG, "Log " + Integer.toString(i));
-							mSocket.emit(EventDefs.JOB_PROGRESS, i*10);
-
-						}
-
-						mSocket.emit(EventDefs.JOB_COMPLETE, "Complete");
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-						if(manager!=null) {
-							manager.setBusy(false);
-						}
-					/*try {
 						for(int i=0;i<buildSteps.length();i++) {
 							JSONObject step = (JSONObject) buildSteps.get(i);
-							ProcessBuilder pb = new ProcessBuilder((String)step.get("command"), (String)step.get("arguments"));
+							String args[] = ((String)step.get("arguments")).split("\\s+");
+							List<String> commands = new ArrayList<String>();
+							commands.add((String)step.get("command"));
+							for(int j=0;j<args.length;j++) {
+								commands.add(args[j]);
+							}
+							ProcessBuilder pb = new ProcessBuilder(commands);
 							pb.redirectErrorStream(true);
 						    pb.directory(new File((String) step.get("commandDir")));
 						    String processResult = "";
@@ -86,7 +108,12 @@ public class SocketIOClientStartJobHandler implements IEventHandler {
 						        	mSocket.emit(EventDefs.JOB_ERROR, processResult);
 					        		return;
 						        } else {
-						        	mSocket.emit(EventDefs.JOB_LOG, processResult);
+						        	JSONObject log = new JSONObject();
+									log.put("command", (String)step.get("command") + " " + (String)step.get("arguments"));
+									log.put("timestamp", getTimeStamp());
+									log.put("step", "Step " + Integer.toString(i));
+									log.put("log", processResult);
+						        	mSocket.emit(EventDefs.JOB_LOG, log);
 						        	mSocket.emit(EventDefs.JOB_PROGRESS, ((i+1)/(double)buildSteps.length())*100);
 						        }
 						    } catch (InterruptedException e) {
@@ -114,7 +141,7 @@ public class SocketIOClientStartJobHandler implements IEventHandler {
 						if(manager!=null) {
 							manager.setBusy(false);
 						}
-					}*/
+					}
 					
 				}
 			
@@ -138,6 +165,14 @@ public class SocketIOClientStartJobHandler implements IEventHandler {
 		this.mSocket = socket;
 		this.mEventId = eventId;
 		this.mConfigLoader = configLoader;
+	}
+	
+	private String getTimeStamp() {
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); 
+		df.setTimeZone(tz);
+		String nowAsISO = df.format(new Date());
+		return nowAsISO;
 	}
 
 }

@@ -5,11 +5,10 @@ function jobLogHandler(job,socket,SocketIO) {
     }
 }
 
-function log(job, msg) {
-    if(job.attrs.data.log)
-        job.attrs.data.log = job.attrs.data.log + msg
-    else 
-        job.attrs.data.log = msg
+function log(job, log) {
+    if(!job.attrs.data.log)
+        job.attrs.data.log = []
+    job.attrs.data.log.push(log)
     job.save()
 }
 

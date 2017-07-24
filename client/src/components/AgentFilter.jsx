@@ -74,12 +74,12 @@ export default class AgentFilter extends Component {
                         <Message>
                             <Form>
                                 <Form.Group widths='equal'>
-                                    <Form.Field>
+                                    <Form.Field required>
                                         <Input name="agentAttribute"
                                             value={this.state.agentFilter.k}
                                             onChange={(e,data) => this.onChangeAgentFilter(data,'agentAttribute')} placeholder='Agent Attribute' required/>
                                     </Form.Field>
-                                    <Form.Field>
+                                    <Form.Field required>
                                         <Input name="agentAttributeValue"
                                             value={this.state.agentFilter.v}
                                             onChange={(e,data) =>this.onChangeAgentFilter(data,'agentAttributeValue')} placeholder='Agent Attribute Value' required/>

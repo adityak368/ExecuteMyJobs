@@ -57,6 +57,13 @@ export default class Jobs extends Component {
             Cell : (props) => <Link to={`/jobs/${props.original._id}`}>
                 {props.value}
             </Link>
+        },
+        {
+            Header: 'Agent',
+            accessor: 'job.data.agent',
+            Cell : (props) => <Link to={`/agents/${props.value}`}>
+                {props.value}
+            </Link>
         }, {
             Header: 'Last Run Started At',
             accessor: 'job.lastRunAt',

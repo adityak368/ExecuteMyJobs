@@ -3,7 +3,7 @@ var defineAgentProcessor = require('../jobs/jobManager').defineAgentProcessor
 
 function handleIdentification(socket, SocketIO) {
     return function(connectedAgent) {
-        connectedAgent.ipAddress = socket.conn.remoteAddress.replace(/^.*:/, '')
+        connectedAgent.ipAddress = ''//socket.conn.remoteAddress.replace(/^.*:/, '')
         connectedAgent.isConnected = true
         Agent.findOne({name: connectedAgent.name}, function (err, registeredAgent) {
             if (err) {

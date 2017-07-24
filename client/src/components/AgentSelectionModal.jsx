@@ -31,6 +31,11 @@ export default class AgentSelectionModal extends Component {
     onSubmitJob() {
         this.props.onCloseAgentSelectionModal() 
         if (this.props.configuration.name) {
+            if(!this.props.isBuildStepAdded) {
+                toastr.error('Please Add a Build Step!', 'Error!')
+                return
+            }
+            
             if(this.state.selectedAgent.trim()) {
                 submitJob({configuration : this.props.configuration, agent : this.state.selectedAgent})
                     .then((message) =>{ this.setState({ selectedAgent : ''}); toastr.success(message, 'Success!')})
@@ -86,7 +91,8 @@ AgentSelectionModal.propTypes = {
     }),
     open : PropTypes.bool.isRequired,
     onCloseAgentSelectionModal : PropTypes.func.isRequired,
-    configuration : PropTypes.object.isRequired
+    configuration : PropTypes.object.isRequired,
+    isBuildStepAdded : PropTypes.bool.isRequired
 }
 
 AgentSelectionModal.defaultProps = {
@@ -95,6 +101,7 @@ AgentSelectionModal.defaultProps = {
     },
     open : false,
     onCloseAgentSelectionModal : null,
-    configuration: {}
+    configuration: {},
+    isBuildStepAdded : PropTypes.bool.isRequired
 }
 

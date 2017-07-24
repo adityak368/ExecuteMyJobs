@@ -3,6 +3,8 @@ package client;
 import java.util.logging.Logger;
 
 import io.socket.client.IO;
+import io.socket.engineio.client.Transport;
+import io.socket.engineio.client.transports.WebSocket;
 
 public class Main {
 
@@ -29,6 +31,7 @@ public class Main {
 			opts.reconnectionDelayMax = 5000;
 			opts.reconnectionAttempts = 1000;
 			opts.path = "/ExecuteByJobs/socket.io";
+			opts.transports = new String[] {WebSocket.NAME};
 			SocketIOClient client = new SocketIOClient(url, opts, configsLoader);
 			client.connect();
 		} else {
